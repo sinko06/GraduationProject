@@ -1,5 +1,7 @@
 package com.example.gogoooma.graduationproject;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -31,16 +33,16 @@ public class ChatActivity extends AppCompatActivity {
 
     public static String uniqueId;
 
-    public static String sender;
-    private String receiver;
     private String type = "text";
+    Friend friend;
+    SharedPreferences auto;
+    public static String sender;
 
     private Boolean hasConnection = false;
 
     private ListView messageListView;
     private MessageAdapter messageAdapter;
 
-    private Thread thread2;
 
     private Socket mSocket;
 
@@ -48,12 +50,14 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        auto = getSharedPreferences("savefile", Activity.MODE_PRIVATE);
+        sender = auto.getString("phone", null);
+
         try {
             mSocket = IO.socket("http://192.168.0.9:2000");
         } catch (URISyntaxException e) {
         }
-        sender = getIntent().getStringExtra("sender");
-        receiver = getIntent().getStringExtra("receiver");
+        friend = (Friend)getIntent().getSerializableExtra("friend");
 
         uniqueId = UUID.randomUUID().toString();
         if(savedInstanceState != null){
@@ -73,7 +77,6 @@ public class ChatActivity extends AppCompatActivity {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-
             }
         }
 
@@ -139,7 +142,7 @@ public class ChatActivity extends AppCompatActivity {
                         e_data = data.getString("data");
                         e_time = data.getLong("time");
 
-                        MessageFormat format = new MessageFormat(e_uniqueID, e_sender, e_receiver,
+                        MessageFormat format = new MessageFormat(e_uniqueID, friend.getName(), e_receiver,
                                 e_type, e_data, e_time);
                         messageAdapter.add(format);
 
@@ -157,7 +160,7 @@ public class ChatActivity extends AppCompatActivity {
             return;
         }
         textField.setText("");
-        String m_receiver = "temp";
+        String m_receiver = friend.getPhone();
         long time = System.currentTimeMillis();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -172,7 +175,7 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         mSocket.emit("chat message", jsonObject);
-        messageList.add(new MessageFormat(uniqueId, sender, m_receiver, type, message, 0));
+        messageList.add(new MessageFormat(uniqueId, sender, friend.getName(), type, message, 0));
         messageAdapter.notifyDataSetChanged();
     }
 

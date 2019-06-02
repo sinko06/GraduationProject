@@ -1,6 +1,8 @@
 package com.example.gogoooma.graduationproject;
 
-public class Friend {
+import java.io.Serializable;
+
+public class Friend implements Serializable {
     String name;
     String phone;
     String picture;

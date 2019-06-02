@@ -42,7 +42,7 @@ public class ManFragment extends Fragment {
     List<Friend> friends;
     ImageButton findUserButton;
     SharedPreferences auto;
-    String sender, receiver;
+    String sender;
 
     public ManFragment() {
         // Required empty public constructor
@@ -72,10 +72,9 @@ public class ManFragment extends Fragment {
         friendsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                receiver = friends.get(position).getPhone();
+                Friend friend = friends.get(position);
                 Intent intent = new Intent(getContext(), ChatActivity.class);
-                intent.putExtra("sender", sender);
-                intent.putExtra("receiver", receiver);
+                intent.putExtra("friend", friend);
                 startActivity(intent);
             }
         });
@@ -98,14 +97,14 @@ public class ManFragment extends Fragment {
                             String[] valueArray = value.split(", ");
                             String _name = null;
                             for(int i=0; i<valueArray.length; i++){
-                                if(valueArray[i].indexOf("name=") != -1){
+                                if(valueArray[i].contains("name=")){
                                     _name = valueArray[i].substring(5);
                                     break;
                                 }
                             }
                             try {
                                 if (!sender.equals(friendsPhone))
-                                    dbUserHelper.addFriend(value, friendsPhone);
+                                    dbUserHelper.addFriend(_name, friendsPhone);
                                 // friendsListView에 추가
                                 friends.add(new Friend(_name, friendsPhone, null));
                                 adapter.notifyDataSetChanged();
