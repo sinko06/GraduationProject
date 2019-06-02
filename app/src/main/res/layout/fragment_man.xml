@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ManFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="man_fragment" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <EditText
+            android:id="@+id/findUserText"
+            android:layout_marginHorizontal="10dp"
+            android:layout_width="0dp"
+            android:hint="전화번호로 친구 찾기"
+            android:layout_weight="6"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/findUserButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@android:drawable/ic_search_category_default" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/friendsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/colorPrimaryDark"
+        android:dividerHeight="0dp"
+        >
+
+    </ListView>
+
+</LinearLayout>

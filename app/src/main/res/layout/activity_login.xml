@@ -18,25 +18,29 @@
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="185dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="50dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/new_logo_white" />
 
 
         <EditText
             android:id="@+id/field_email"
+            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:hint="이메일"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
             android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/field_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
             android:layout_marginHorizontal="10dp"
             android:hint="비밀번호"
             android:inputType="textPassword" />

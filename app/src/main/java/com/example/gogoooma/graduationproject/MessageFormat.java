@@ -7,14 +7,24 @@ public class MessageFormat {
     private String receiver;
     private String type;
     private String data;
+    private long time;
 
     public MessageFormat(String uniqueID, String sender, String receiver
-            , String type, String data) {
+            , String type, String data, long time) {
         this.sender = sender;
         this.receiver = receiver;
         this.type = type;
         this.data = data;
         this.uniqueID = uniqueID;
+        this.time = time;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public String getSender() {

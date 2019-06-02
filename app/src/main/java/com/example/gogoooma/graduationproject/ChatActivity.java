@@ -49,10 +49,11 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         try {
-            mSocket = IO.socket("http://58.141.187.7:2000");
+            mSocket = IO.socket("http://192.168.0.9:2000");
         } catch (URISyntaxException e) {
         }
-        sender = getIntent().getStringExtra("username");
+        sender = getIntent().getStringExtra("sender");
+        receiver = getIntent().getStringExtra("receiver");
 
         uniqueId = UUID.randomUUID().toString();
         if(savedInstanceState != null){
@@ -129,15 +130,17 @@ public class ChatActivity extends AppCompatActivity {
                     String e_receiver;
                     String e_type;
                     String e_data;
+                    long e_time;
                     try {
                         e_uniqueID = data.getString("uniqueID");
                         e_sender = data.getString("sender");
                         e_receiver = data.getString("receiver");
                         e_type = data.getString("type");
                         e_data = data.getString("data");
+                        e_time = data.getLong("time");
 
                         MessageFormat format = new MessageFormat(e_uniqueID, e_sender, e_receiver,
-                                e_type, e_data);
+                                e_type, e_data, e_time);
                         messageAdapter.add(format);
 
                     } catch (Exception e) {
@@ -155,6 +158,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         textField.setText("");
         String m_receiver = "temp";
+        long time = System.currentTimeMillis();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("uniqueID", uniqueId);
@@ -162,11 +166,13 @@ public class ChatActivity extends AppCompatActivity {
             jsonObject.put("receiver", m_receiver);
             jsonObject.put("type", type);
             jsonObject.put("data", message);
+            jsonObject.put("time", time);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         mSocket.emit("chat message", jsonObject);
-        messageList.add(new MessageFormat(uniqueId, sender, m_receiver, type, message));
+        messageList.add(new MessageFormat(uniqueId, sender, m_receiver, type, message, 0));
         messageAdapter.notifyDataSetChanged();
     }
 

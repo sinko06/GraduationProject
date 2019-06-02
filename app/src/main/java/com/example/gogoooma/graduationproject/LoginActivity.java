@@ -1,8 +1,14 @@
 package com.example.gogoooma.graduationproject;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +20,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends BaseActivity implements
         View.OnClickListener {
@@ -58,31 +66,8 @@ public class LoginActivity extends BaseActivity implements
     // [END on_start_check_user]
 
     private void createAccount(String email, String password) {
-        if (!validateForm()) {
-            return;
-        }
-        // BaseActivity의 로딩중 다이얼로그
-        showProgressDialog();
-        // 이메일 생성
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-
-                        hideProgressDialog();
-                    }
-                });
+        Intent intent = new Intent(LoginActivity.this, SignInActivity.class);
+        startActivity(intent);
     }
 
     private void signIn(String email, String password) {
@@ -209,67 +194,6 @@ public class LoginActivity extends BaseActivity implements
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
+
 }
-/*
-public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "EmailPassword";
-
-    private Button button_signIn;
-    private Button button_createAccount;
-    private Button button_signOut;
-    private Button button_verifyEmail;
-    private EditText mEmailField;
-    private EditText mPasswordField;
-
-    // [START declare_auth]
-    private FirebaseAuth mAuth;
-    // [END declare_auth]
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        button_signIn = (Button)findViewById(R.id.email_sign_in_button);
-        button_createAccount = (Button)findViewById(R.id.email_create_account_button);
-        button_verifyEmail = (Button)findViewById(R.id.verify_email_button);
-        button_signOut = (Button)findViewById(R.id.sign_out_button);
-        mEmailField = (EditText)findViewById(R.id.field_email);
-        mPasswordField = (EditText)findViewById(R.id.field_password);
-        mAuth = FirebaseAuth.getInstance();
-
-        button_signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = mEmailField.getText().toString().trim();
-                String pwd = mPasswordField.getText().toString().trim();
-
-                mAuth.signInWithEmailAndPassword(email, pwd)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "로그인 오류", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-            }
-        });
-
-       button_createAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "gd", Toast.LENGTH_SHORT).show();
-                */
-/*Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(intent);*//*
-
-            }
-        });
-    }
-}
-*/
