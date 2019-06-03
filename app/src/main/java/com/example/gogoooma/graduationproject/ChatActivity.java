@@ -90,6 +90,9 @@ public class ChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.sendButton);
         messageListView = findViewById(R.id.messageListView);
 
+
+        출처: https://bean-and-yu.tistory.com/76 [실용주의 프로그래머]
+
         messageList = new ArrayList<>();
         // 처음 들어왔을 때 DBHelper를 통해 대화목록 불러오기
         try {
