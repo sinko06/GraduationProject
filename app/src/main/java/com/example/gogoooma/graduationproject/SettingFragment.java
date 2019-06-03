@@ -20,6 +20,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class SettingFragment extends Fragment {
     TextView my_profile_name, my_profile_phone;
     SharedPreferences auto;
     String myPhone, myName;
+    public static String ipnum;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -182,5 +184,13 @@ public class SettingFragment extends Fragment {
         my_profile_phone = (TextView) v.findViewById(R.id.my_profile_phone);
         my_profile_phone.setText(myPhone);
         my_profile_name.setText(myName);
+        final EditText tempip = (EditText) v.findViewById(R.id.temp_ip);
+        Button tempbutton = (Button) v.findViewById(R.id.temp_button);
+        tempbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ipnum = tempip.getText().toString();
+            }
+        });
     }
 }

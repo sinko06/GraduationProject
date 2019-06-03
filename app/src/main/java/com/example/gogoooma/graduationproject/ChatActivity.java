@@ -56,7 +56,8 @@ public class ChatActivity extends AppCompatActivity {
 
 
         try {
-            mSocket = IO.socket("http://192.168.0.9:2000");
+            //mSocket = IO.socket("http://192.168.26.214:2000");
+            mSocket = IO.socket("http://" + SettingFragment.ipnum + ":2000");
         } catch (URISyntaxException e) {
         }
         friend = (Friend) getIntent().getSerializableExtra("friend");
