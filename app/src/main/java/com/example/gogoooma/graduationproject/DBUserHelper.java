@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.ExceptionCatchingInputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,12 @@ public class DBUserHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
 
+    }
+
+    public void resetFriendsList(){
+        SQLiteDatabase db = getWritableDatabase();
+        String clearDBQuery = " DELETE FROM FRIENDSLIST ";
+        db.execSQL(clearDBQuery);
     }
 
     public void testDB() {

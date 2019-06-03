@@ -43,8 +43,9 @@ public class ChatActivity extends AppCompatActivity {
     private ListView messageListView;
     private MessageAdapter messageAdapter;
 
-
     private Socket mSocket;
+
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +54,14 @@ public class ChatActivity extends AppCompatActivity {
         auto = getSharedPreferences("savefile", Activity.MODE_PRIVATE);
         sender = auto.getString("phone", null);
 
+
         try {
             mSocket = IO.socket("http://192.168.0.9:2000");
         } catch (URISyntaxException e) {
         }
-        friend = (Friend)getIntent().getSerializableExtra("friend");
-
+        friend = (Friend) getIntent().getSerializableExtra("friend");
+        dbHelper = new DBHelper(ChatActivity.this,
+                friend.getPhone(), null, 1);
         uniqueId = UUID.randomUUID().toString();
         if(savedInstanceState != null){
             hasConnection = savedInstanceState.getBoolean("hasConnection");
@@ -87,6 +90,10 @@ public class ChatActivity extends AppCompatActivity {
         messageListView = findViewById(R.id.messageListView);
 
         messageList = new ArrayList<>();
+        // 처음 들어왔을 때 DBHelper를 통해 대화목록 불러오기
+        try {
+            messageList = dbHelper.getAllMsg();
+        }catch (Exception e){}
         messageAdapter = new MessageAdapter(this, R.layout.item_message, messageList);
         messageListView.setAdapter(messageAdapter);
 
@@ -145,6 +152,9 @@ public class ChatActivity extends AppCompatActivity {
                         MessageFormat format = new MessageFormat(e_uniqueID, friend.getName(), e_receiver,
                                 e_type, e_data, e_time);
                         messageAdapter.add(format);
+                        // DBHelper sqlite에 넣기
+                        dbHelper.addMessage(e_time, e_sender, e_type, e_data);
+                        // 처음이라면 DBUserHelper에도 넣고 아니라면 시간 갱신
 
                     } catch (Exception e) {
                         return;
@@ -177,6 +187,7 @@ public class ChatActivity extends AppCompatActivity {
         mSocket.emit("chat message", jsonObject);
         messageList.add(new MessageFormat(uniqueId, sender, friend.getName(), type, message, 0));
         messageAdapter.notifyDataSetChanged();
+        dbHelper.addMessage(time, sender, type, message);
     }
 
     @Override

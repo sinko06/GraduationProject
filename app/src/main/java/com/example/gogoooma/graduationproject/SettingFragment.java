@@ -37,13 +37,15 @@ import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SettingFragment extends Fragment {
     View v;
-    private Button logout_button, update_button;
+    private Button logout_button, update_button, reset_button;
     private FirebaseAuth mfirebaseAuth;
     private DBUserHelper dbUserHelper;
     TextView my_profile_name, my_profile_phone;
@@ -70,6 +72,7 @@ public class SettingFragment extends Fragment {
         mfirebaseAuth = FirebaseAuth.getInstance();
         logout_button = (Button)v.findViewById(R.id.button_logout);
         update_button = (Button)v.findViewById(R.id.button_update_friendslist);
+        reset_button = (Button)v.findViewById(R.id.button_reset);
 
         logout_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +141,26 @@ public class SettingFragment extends Fragment {
                 }
             }
         });
+
+        reset_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(dbUserHelper==null)
+                    dbUserHelper = new DBUserHelper(getContext(),
+                            "FRIENDSLIST", null, 1);
+                List<Friend> deleteFriendsList = dbUserHelper.getAllFriends();
+                DBHelper dbHelper;
+                for(int i=0; i<deleteFriendsList.size(); i++) {
+                    dbHelper = new DBHelper(getContext(), deleteFriendsList.get(i).getPhone(),
+                            null, 1);
+                    dbHelper.deleteFriendsChat();
+                    Log.e("deleted", "completed");
+                }
+                dbUserHelper.resetFriendsList();
+            }
+        });
+
+
 
 
 

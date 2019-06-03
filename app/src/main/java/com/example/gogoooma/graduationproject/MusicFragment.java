@@ -56,7 +56,7 @@ public class MusicFragment extends Fragment {
                 if(dbHelper == null)
                     dbHelper = new DBHelper(getContext(),
                             "helloDB", null, 1);
-                dbHelper.addMessage("text", msg);
+                //dbHelper.addMessage("text", msg);
             }
         });
 

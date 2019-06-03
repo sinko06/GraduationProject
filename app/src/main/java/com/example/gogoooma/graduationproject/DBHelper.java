@@ -15,19 +15,27 @@ public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         this.context = context;
-        this.dbname = name;
+        this.dbname = "DB"+name;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         StringBuffer sb = new StringBuffer();
         sb.append(" CREATE TABLE " + dbname + " ( ");
-        sb.append(" _ID INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        sb.append(" TIME INTEGER PRIMARY KEY, ");
+        sb.append(" SENDER TEXT, ");
         sb.append(" TYPE TEXT, ");
         sb.append(" MESSAGE TEXT ) ");
 
         //SQLite Database로 쿼리실행
         db.execSQL(sb.toString());
+    }
+
+    public void deleteFriendsChat(){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            db.execSQL(" DROP TABLE IF EXISTS " + dbname + " ");
+        } catch (Exception e){}
     }
 
     // application의 버전 올라가서 테이블 구조 변경 되었을 때 실행
@@ -40,30 +48,31 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
     }
 
-    public void addMessage(String type, String msg){
+    public void addMessage(long time, String sender, String type, String msg){
         SQLiteDatabase db = getWritableDatabase();
 
         StringBuffer sb = new StringBuffer();
         sb.append(" INSERT INTO "+ dbname +" ( ");
-        sb.append(" TYPE, MESSAGE ) ");
-        sb.append(" VALUES ( ?, ? ) ");
+        sb.append(" TIME, SENDER, TYPE, MESSAGE ) ");
+        sb.append(" VALUES ( ?, ?, ?, ? ) ");
 
         db.execSQL(sb.toString(),
                 new Object[]{
-                        type, msg
+                        time, sender, type, msg
                 });
     }
 
-    public List getAllMsg(){
-        List msgs = new ArrayList();
+    public List<MessageFormat> getAllMsg(){
+        List<MessageFormat> msgs = new ArrayList();
         StringBuffer sb = new StringBuffer();
-        sb.append(" SELECT MESSAGE FROM "+ dbname );
+        sb.append(" SELECT TIME, SENDER, TYPE, MESSAGE FROM "+ dbname );
         // 읽기 전용 DB 객체를 만든다.
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sb.toString(), null);
 
         while( cursor.moveToNext() ) {
-            msgs.add(cursor.getString(0));
+            msgs.add(new MessageFormat("", cursor.getString(1), "",
+                    cursor.getString(2), cursor.getString(3), cursor.getLong(0)));
         }
 
         return msgs;
