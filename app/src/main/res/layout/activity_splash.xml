@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/splashactivity_linearlayout"
-    android:gravity="center"
-    android:background="@color/colorPrimary"
+    android:gravity="center_horizontal"
+    android:background="@drawable/gradient_bg"
     tools:context=".SplashActivity">
 
     <ImageView
-        android:src="@drawable/new_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_marginTop="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/new_logo_white" />
 
 </LinearLayout>

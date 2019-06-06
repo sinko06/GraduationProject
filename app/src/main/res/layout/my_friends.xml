@@ -14,7 +14,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
-        app:srcCompat="@drawable/menu_man" />
+        app:srcCompat="@drawable/profile_boy" />
 
     <LinearLayout
         android:layout_width="0dp"

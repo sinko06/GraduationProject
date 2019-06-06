@@ -7,56 +7,98 @@
     android:orientation="vertical"
     tools:context=".SettingFragment">
 
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        app:srcCompat="@drawable/menu_man" />
-
-    <TextView
-        android:id="@+id/my_profile_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-    <TextView
-        android:id="@+id/my_profile_phone"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:layout_marginTop="20dp"
-        android:id="@+id/button_logout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="로그아웃" />
+        android:background="@drawable/gradient_bg"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_update_friendslist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="친구목록 업데이트" />
-    <Button
-        android:id="@+id/button_reset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="초기화" />
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="#ffffff"
+            app:srcCompat="@drawable/profile_boy" />
+
+        <TextView
+            android:id="@+id/my_profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:id="@+id/my_profile_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/temp_ip"
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical">
+
         <Button
-            android:id="@+id/temp_button"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:text="find ip"
-            android:layout_height="wrap_content" />
+            android:id="@+id/button_logout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_shape"
+            android:textColor="#ffffff"
+            android:backgroundTint="#9b47e5"
+            android:text="로그아웃" />
+
+        <Button
+            android:id="@+id/button_update_friendslist"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_shape"
+            android:textColor="#ffffff"
+            android:backgroundTint="#9b47e5"
+            android:text="친구목록 업데이트" />
+
+        <Button
+            android:id="@+id/button_reset"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textColor="#ffffff"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_shape"
+            android:backgroundTint="#9b47e5"
+            android:text="초기화" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/temp_ip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:textColor="#9b47e5" />
+
+            <Button
+                android:id="@+id/temp_button"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="2"
+                android:textColor="#ffffff"
+                android:background="@drawable/button_shape"
+                android:backgroundTint="#9b47e5"
+                android:text="find ip" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 </LinearLayout>
