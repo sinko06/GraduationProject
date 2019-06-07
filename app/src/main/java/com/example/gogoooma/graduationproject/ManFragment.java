@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,15 +36,18 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ManFragment extends Fragment {
+public class ManFragment extends Fragment implements View.OnClickListener{
     View v;
+    Animation fab_open, fab_close, rotate_forward, rotate_backward;
+    Boolean isFabOpen = false;
+    FloatingActionButton fab, fab1, fab2;
     DBUserHelper dbUserHelper;
     ListView friendsListView;
-    FriendAdapter adapter;
-    EditText findUserText;
+    public static FriendAdapter adapter;
+    //EditText findUserText;
     String friendsPhone;
-    List<Friend> friends;
-    ImageButton findUserButton;
+    public static List<Friend> friends;
+    //ImageButton findUserButton;
     SharedPreferences auto;
     String sender;
 
@@ -57,9 +64,8 @@ public class ManFragment extends Fragment {
         sender = auto.getString("phone", null);
 
         v = inflater.inflate(R.layout.fragment_man, container, false);
+        initFab();
         friendsListView = (ListView) v.findViewById(R.id.friendsListView);
-        findUserText = (EditText) v.findViewById(R.id.findUserText);
-        findUserButton = (ImageButton) v.findViewById(R.id.findUserButton);
 
         if(dbUserHelper == null)
             dbUserHelper = new DBUserHelper(getContext(),
@@ -79,6 +85,79 @@ public class ManFragment extends Fragment {
             }
         });
 
+        return v;
+    }
+
+    public void initFab(){
+        fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        fab1 = (FloatingActionButton) v.findViewById(R.id.fab1);
+        fab2 = (FloatingActionButton) v.findViewById(R.id.fab2);
+
+        fab_open = AnimationUtils.loadAnimation(v.getContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(v.getContext(), R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(v.getContext(), R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(v.getContext(), R.anim.rotate_backward);
+
+        fab.setOnClickListener(this);
+        fab1.setOnClickListener(this);
+        fab2.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        super.onContextItemSelected(item);
+
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.fab:
+                animateFAB();
+                break;
+            case R.id.fab1:
+                // add user
+                DialogSearchFriend dlg = new DialogSearchFriend(getContext());
+                dlg.callFunction();
+                break;
+            case R.id.fab2:
+                // search friend
+                break;
+        }
+    }
+
+    public void animateFAB() {
+
+        if (isFabOpen) {
+
+            fab.startAnimation(rotate_backward);
+            fab1.startAnimation(fab_close);
+            fab2.startAnimation(fab_close);
+            fab1.setClickable(false);
+            fab2.setClickable(false);
+            isFabOpen = false;
+            fab1.hide();
+            fab2.hide();
+            Log.d("Raj", "close");
+
+        } else {
+            fab.startAnimation(rotate_forward);
+            fab1.startAnimation(fab_open);
+            fab2.startAnimation(fab_open);
+            fab1.setClickable(true);
+            fab2.setClickable(true);
+            fab1.show();
+            fab2.show();
+
+            isFabOpen = true;
+            Log.d("Raj", "open");
+
+        }
+    }
+
+    /*
         findUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,8 +199,8 @@ public class ManFragment extends Fragment {
 
             }
         });
+        */
 
-        return v;
-    }
+
 
 }

@@ -34,7 +34,7 @@ public class ChatListAdapter extends ArrayAdapter<Talk> {
         }
         msg.setText(lastMsg);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 yy일 hh시 mm분");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 dd일 hh시 mm분");
         String timeText = dateFormat.format(new Date(talk.getTime()));
 
         time.setText(timeText);

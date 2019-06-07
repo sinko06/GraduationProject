@@ -91,7 +91,6 @@ public class SettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getPermission();
-
                 // 전화번호부에 있는 친구 목록
                 Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 String[] projection = new String[]{
@@ -150,33 +149,12 @@ public class SettingFragment extends Fragment {
         reset_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File cache = getContext().getCacheDir();
-                File appDir = new File(cache.getParent());
-                if (appDir.exists()) {
-                    String[] children = appDir.list();
-                    for (String s : children) {
-                        if (!s.equals("lib") && !s.equals("files")) {
-                            deleteDir(new File(appDir, s));
-                        }
-                    }
-                }
+                DialogCheckReset dialogCheckID = new DialogCheckReset(getContext());
+                dialogCheckID.callFunction();
             }
         });
 
         return v;
-    }
-
-    private static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        return dir.delete();
     }
 
     public void getPermission() {
@@ -200,12 +178,6 @@ public class SettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // 로컬에 정보 저장
-                final SharedPreferences auto;
-                auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
-                if (auto.getString("phone", null) != null) {
-                    auto.edit().clear().commit();
-                }
-
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("users");
                 final String key = tempip.getText().toString().
@@ -214,6 +186,11 @@ public class SettingFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
+                            SharedPreferences auto;
+                            auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
+                            if (auto.getString("phone", null) != null) {
+                                auto.edit().clear().commit();
+                            }
                             String value = dataSnapshot.child(key).getValue().toString();
                             value = value.substring(1, value.length() - 1);
                             String[] valueArray = value.split(", ");
@@ -231,12 +208,14 @@ public class SettingFragment extends Fragment {
 
                             my_profile_name.setText(_name);
                             my_profile_phone.setText(tempip.getText().toString());
-                        }
+                            Toast.makeText(getContext(), "인증되었습니다", Toast.LENGTH_SHORT).show();
+                        }else
+                            Toast.makeText(getContext(), "등록된 전화번호가 없습니다", Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                     }
                 });
 
