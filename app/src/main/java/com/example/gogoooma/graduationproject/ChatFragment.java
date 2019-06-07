@@ -11,9 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -27,6 +31,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -34,8 +40,9 @@ import java.net.URL;
  */
 public class ChatFragment extends Fragment {
     View v;
-    private Button setNickName;
-    private EditText userNickName;
+    ListView listView;
+    DBRoomHelper dbRoomHelper;
+    List<Talk> talkList;
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -46,33 +53,20 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_chat, container, false);
-        userNickName = v.findViewById(R.id.userNickName);
-        setNickName = v.findViewById(R.id.setNickName);
+        dbRoomHelper = new DBRoomHelper(getContext(), "TALKLIST", null, 1);
+        talkList = dbRoomHelper.getAllTalk();
+        listView = (ListView) v.findViewById(R.id.chat_listview);
+        ChatListAdapter adapter = new ChatListAdapter(getContext(), R.layout.chatlist_row,
+                talkList);
+        listView.setAdapter(adapter);
 
-        userNickName.addTextChangedListener(new TextWatcher() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
-                    setNickName.setEnabled(true);
-                } else {
-                    setNickName.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        setNickName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Friend friend = new Friend(talkList.get(i).getFriendName(),
+                        talkList.get(i).getDbName(), null);
                 Intent intent = new Intent(getContext(), ChatActivity.class);
-                intent.putExtra("sender", userNickName.getText().toString());
+                intent.putExtra("friend", friend);
                 startActivity(intent);
             }
         });
@@ -80,7 +74,19 @@ public class ChatFragment extends Fragment {
         return v;
     }
 
-//    tvData = (TextView)v.findViewById(R.id.textView);
+    @Override
+    public void onResume() {
+        super.onResume();
+        dbRoomHelper = new DBRoomHelper(getContext(), "TALKLIST", null, 1);
+        talkList.clear();
+        talkList = dbRoomHelper.getAllTalk();
+        listView = (ListView) v.findViewById(R.id.chat_listview);
+        ChatListAdapter adapter = new ChatListAdapter(getContext(), R.layout.chatlist_row,
+                talkList);
+        listView.setAdapter(adapter);
+    }
+
+    //    tvData = (TextView)v.findViewById(R.id.textView);
 //    Button btn = (Button)v.findViewById(R.id.httpTest);
 //    //버튼이 클릭되면 여기 리스너로 옴
 //        btn.setOnClickListener(new View.OnClickListener() {

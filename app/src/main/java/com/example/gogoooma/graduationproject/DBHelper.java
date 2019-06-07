@@ -74,6 +74,8 @@ public class DBHelper extends SQLiteOpenHelper {
             msgs.add(new MessageFormat("", cursor.getString(1), "",
                     cursor.getString(2), cursor.getString(3), cursor.getLong(0)));
         }
+        cursor.moveToFirst();
+        cursor.close();
 
         return msgs;
     }

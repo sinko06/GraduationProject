@@ -46,6 +46,7 @@ public class ChatActivity extends AppCompatActivity {
     private Socket mSocket;
 
     private DBHelper dbHelper;
+    private DBRoomHelper dbRoomHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,8 @@ public class ChatActivity extends AppCompatActivity {
         friend = (Friend) getIntent().getSerializableExtra("friend");
         dbHelper = new DBHelper(ChatActivity.this,
                 friend.getPhone(), null, 1);
+        dbRoomHelper = new DBRoomHelper(getApplicationContext(),
+                "TALKLIST", null, 1);
         uniqueId = UUID.randomUUID().toString();
         if(savedInstanceState != null){
             hasConnection = savedInstanceState.getBoolean("hasConnection");
@@ -89,9 +92,6 @@ public class ChatActivity extends AppCompatActivity {
         textField = findViewById(R.id.textField);
         sendButton = findViewById(R.id.sendButton);
         messageListView = findViewById(R.id.messageListView);
-
-
-        출처: https://bean-and-yu.tistory.com/76 [실용주의 프로그래머]
 
         messageList = new ArrayList<>();
         // 처음 들어왔을 때 DBHelper를 통해 대화목록 불러오기
@@ -153,12 +153,17 @@ public class ChatActivity extends AppCompatActivity {
                         e_data = data.getString("data");
                         e_time = data.getLong("time");
 
-                        MessageFormat format = new MessageFormat(e_uniqueID, friend.getName(), e_receiver,
+                        MessageFormat format = new MessageFormat(friend.getName(), e_sender, e_receiver,
                                 e_type, e_data, e_time);
                         messageAdapter.add(format);
                         // DBHelper sqlite에 넣기
                         dbHelper.addMessage(e_time, e_sender, e_type, e_data);
                         // 처음이라면 DBUserHelper에도 넣고 아니라면 시간 갱신
+                        try{
+                            dbRoomHelper.addTalk(e_sender, friend.getName(), e_data, e_time);
+                        }catch (Exception e){
+                            dbRoomHelper.updateTalk(e_sender, e_data, e_time);
+                        }
 
                     } catch (Exception e) {
                         return;
@@ -189,9 +194,14 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         mSocket.emit("chat message", jsonObject);
-        messageList.add(new MessageFormat(uniqueId, sender, friend.getName(), type, message, 0));
+        messageList.add(new MessageFormat(friend.getName(), sender, friend.getName(), type, message, 0));
         messageAdapter.notifyDataSetChanged();
         dbHelper.addMessage(time, sender, type, message);
+        try{
+            dbRoomHelper.addTalk(m_receiver, friend.getName(), message, time);
+        }catch (Exception e){
+            dbRoomHelper.updateTalk(m_receiver, message, time);
+        }
     }
 
     @Override

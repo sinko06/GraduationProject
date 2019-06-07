@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -68,19 +69,18 @@ public class SettingFragment extends Fragment {
 
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_setting, container, false);
-        getPermission();
         init();
 
         mfirebaseAuth = FirebaseAuth.getInstance();
-        logout_button = (Button)v.findViewById(R.id.button_logout);
-        update_button = (Button)v.findViewById(R.id.button_update_friendslist);
-        reset_button = (Button)v.findViewById(R.id.button_reset);
+        logout_button = (Button) v.findViewById(R.id.button_logout);
+        update_button = (Button) v.findViewById(R.id.button_update_friendslist);
+        reset_button = (Button) v.findViewById(R.id.button_reset);
 
         logout_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mfirebaseAuth.signOut();
-                Log.v("로그아웃","로그아웃 완료");
+                Log.v("로그아웃", "로그아웃 완료");
 
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
@@ -90,9 +90,11 @@ public class SettingFragment extends Fragment {
         update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getPermission();
+
                 // 전화번호부에 있는 친구 목록
                 Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                String[] projection = new String[] {
+                String[] projection = new String[]{
                         ContactsContract.CommonDataKinds.Phone.NUMBER};
                 Cursor cursor = getContext().getContentResolver().
                         query(uri, projection, null, null, null);
@@ -104,7 +106,7 @@ public class SettingFragment extends Fragment {
                         "FRIENDSLIST", null, 1);
 //                dbUserHelper.testDB();
 
-                while (cursor.moveToNext()){
+                while (cursor.moveToNext()) {
                     try {
 //                        Log.e("getKey", cursor.getString(0));
                         final String key = cursor.getString(0).
@@ -112,13 +114,13 @@ public class SettingFragment extends Fragment {
                         myRef.orderByKey().equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
+                                if (dataSnapshot.exists()) {
                                     String value = dataSnapshot.child(key).getValue().toString();
-                                    value = value.substring(1, value.length()-1);
+                                    value = value.substring(1, value.length() - 1);
                                     String[] valueArray = value.split(", ");
                                     String _name = null;
-                                    for(int i=0; i<valueArray.length; i++){
-                                        if(valueArray[i].indexOf("name=") != -1){
+                                    for (int i = 0; i < valueArray.length; i++) {
+                                        if (valueArray[i].indexOf("name=") != -1) {
                                             _name = valueArray[i].substring(5);
                                             break;
                                         }
@@ -126,9 +128,10 @@ public class SettingFragment extends Fragment {
                                     //key 값을 sqlite로 보내기
                                     try {
                                         Log.e("getPhone", myPhone);
-                                        if(!myPhone.equals(key))
+                                        if (!myPhone.equals(key))
                                             dbUserHelper.addFriend(_name, key);
-                                    }catch (Exception e){}
+                                    } catch (Exception e) {
+                                    }
                                 }
                             }
 
@@ -137,7 +140,7 @@ public class SettingFragment extends Fragment {
 
                             }
                         });
-                    }catch(Exception e) {
+                    } catch (Exception e) {
                         System.out.println(e.toString());
                     }
                 }
@@ -147,26 +150,33 @@ public class SettingFragment extends Fragment {
         reset_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(dbUserHelper==null)
-                    dbUserHelper = new DBUserHelper(getContext(),
-                            "FRIENDSLIST", null, 1);
-                List<Friend> deleteFriendsList = dbUserHelper.getAllFriends();
-                DBHelper dbHelper;
-                for(int i=0; i<deleteFriendsList.size(); i++) {
-                    dbHelper = new DBHelper(getContext(), deleteFriendsList.get(i).getPhone(),
-                            null, 1);
-                    dbHelper.deleteFriendsChat();
-                    Log.e("deleted", "completed");
+                File cache = getContext().getCacheDir();
+                File appDir = new File(cache.getParent());
+                if (appDir.exists()) {
+                    String[] children = appDir.list();
+                    for (String s : children) {
+                        if (!s.equals("lib") && !s.equals("files")) {
+                            deleteDir(new File(appDir, s));
+                        }
+                    }
                 }
-                dbUserHelper.resetFriendsList();
             }
         });
 
-
-
-
-
         return v;
+    }
+
+    private static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
     }
 
     public void getPermission() {
@@ -179,7 +189,7 @@ public class SettingFragment extends Fragment {
         }
     }
 
-    public void init(){
+    public void init() {
         my_profile_name = (TextView) v.findViewById(R.id.my_profile_name);
         my_profile_phone = (TextView) v.findViewById(R.id.my_profile_phone);
         my_profile_phone.setText(myPhone);
@@ -189,7 +199,47 @@ public class SettingFragment extends Fragment {
         tempbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ipnum = tempip.getText().toString();
+                // 로컬에 정보 저장
+                final SharedPreferences auto;
+                auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
+                if (auto.getString("phone", null) != null) {
+                    auto.edit().clear().commit();
+                }
+
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("users");
+                final String key = tempip.getText().toString().
+                        replaceAll("-", "").replace("\\+82", "0");
+                myRef.orderByKey().equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            String value = dataSnapshot.child(key).getValue().toString();
+                            value = value.substring(1, value.length() - 1);
+                            String[] valueArray = value.split(", ");
+                            String _name = null;
+                            for (int i = 0; i < valueArray.length; i++) {
+                                if (valueArray[i].indexOf("name=") != -1) {
+                                    _name = valueArray[i].substring(5);
+                                    break;
+                                }
+                            }
+                            SharedPreferences.Editor autoLogin = auto.edit();
+                            autoLogin.putString("phone", tempip.getText().toString());
+                            autoLogin.putString("name", _name);
+                            autoLogin.commit();
+
+                            my_profile_name.setText(_name);
+                            my_profile_phone.setText(tempip.getText().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         });
     }

@@ -36,7 +36,7 @@ public class MessageAdapter extends ArrayAdapter<MessageFormat> {
             usernameText.setVisibility(View.VISIBLE);
 
             messageText.setText(message.getData());
-            usernameText.setText(message.getSender());
+            usernameText.setText(message.getUniqueID());
         }
 
         return convertView;

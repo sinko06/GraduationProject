@@ -33,10 +33,7 @@
     <ListView
         android:id="@+id/friendsListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/colorPrimaryDark"
-        android:dividerHeight="0.5dp"
-        >
+        android:layout_height="wrap_content">
 
     </ListView>
 

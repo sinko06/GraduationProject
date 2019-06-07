@@ -1,6 +1,8 @@
 package com.example.gogoooma.graduationproject;
 
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class MusicFragment extends Fragment {
     private DBHelper dbHelper;
     ListView listView;
     ArrayAdapter<String> adapter;
+    SharedPreferences auto;
 
     public MusicFragment() {
         // Required empty public constructor
@@ -35,43 +39,12 @@ public class MusicFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_music, container, false);
-        Button button1 = (Button) v.findViewById(R.id.createDB);
-        Button button2 = (Button) v.findViewById(R.id.button2);
-        Button button3 = (Button) v.findViewById(R.id.button3);
-        listView = (ListView) v.findViewById(R.id.listview1);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dbHelper = new DBHelper(getContext(),
-                        "helloDB", null, 1);
-                dbHelper.testDB();
-            }
-        });
+        auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
+        TextView tv1 = (TextView) v.findViewById(R.id.music_profile_name);
+        TextView tv2 = (TextView) v.findViewById(R.id.music_profile_phone);
 
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText e1 = (EditText) v.findViewById(R.id.edit1);
-                String msg = e1.getText().toString();
-                if(dbHelper == null)
-                    dbHelper = new DBHelper(getContext(),
-                            "helloDB", null, 1);
-                //dbHelper.addMessage("text", msg);
-            }
-        });
-
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(dbHelper == null)
-                    dbHelper = new DBHelper(getContext(),
-                            "helloDB", null, 1);
-                List msgs = dbHelper.getAllMsg();
-                adapter = new ArrayAdapter<String>(getContext(),
-                        android.R.layout.simple_list_item_1, msgs);
-                listView.setAdapter(adapter);
-            }
-        });
+        tv1.setText(auto.getString("name", null));
+        tv2.setText(auto.getString("phone", null));
 
         return v;
     }

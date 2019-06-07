@@ -95,7 +95,7 @@
                 android:textColor="#ffffff"
                 android:background="@drawable/button_shape"
                 android:backgroundTint="#9b47e5"
-                android:text="find ip" />
+                android:text="인증" />
 
         </LinearLayout>
 

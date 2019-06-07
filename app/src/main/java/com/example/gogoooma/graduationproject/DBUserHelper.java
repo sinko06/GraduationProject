@@ -72,7 +72,8 @@ public class DBUserHelper extends SQLiteOpenHelper {
         while( cursor.moveToNext() ) {
             friends.add(new Friend(cursor.getString(0), cursor.getString(1), null));
         }
-
+        cursor.moveToFirst();
+        cursor.close();
         return friends;
     }
 }

@@ -2,13 +2,15 @@ package com.example.gogoooma.graduationproject;
 
 public class Talk {
     String dbName;
+    String friendName;
     String lastMsg;
     long time;
 
-    public Talk(String dbName, String lastMsg, long time) {
+    public Talk(String dbName, String friendName, String lastMsg, long time) {
         this.dbName = dbName;
         this.lastMsg = lastMsg;
         this.time = time;
+        this.friendName = friendName;
     }
 
     public String getDbName() {
@@ -33,5 +35,13 @@ public class Talk {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public String getFriendName() {
+        return friendName;
+    }
+
+    public void setFriendName(String friendName) {
+        this.friendName = friendName;
     }
 }
