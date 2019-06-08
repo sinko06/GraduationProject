@@ -21,7 +21,36 @@
             android:paddingLeft="40dp"
             android:textColor="#ffffff"
             android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title" />
+        <LinearLayout
+            android:id="@+id/man_find_layout"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/man_find_edit"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:background="@drawable/edit_shape_purple"
+                android:drawableLeft="@drawable/man_search_size"
+                android:drawablePadding="10dp"
+                android:hint="Search"
+                android:drawableTint="@color/colorPrimaryDark"
+                android:layout_height="45dp" />
+
+            <Button
+                android:id="@+id/man_find_button"
+                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:background="@drawable/button_shape"
+                android:textColor="#ffffff"
+                android:text="취소"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:layout_height="35dp" />
+
+        </LinearLayout>
         <ListView
             android:id="@+id/friendsListView"
             android:layout_width="match_parent"

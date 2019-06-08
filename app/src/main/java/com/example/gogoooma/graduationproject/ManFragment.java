@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ListViewAutoScrollHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,8 +19,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,23 +34,28 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ManFragment extends Fragment implements View.OnClickListener{
+public class ManFragment extends Fragment implements View.OnClickListener {
     View v;
     Animation fab_open, fab_close, rotate_forward, rotate_backward;
     Boolean isFabOpen = false;
     FloatingActionButton fab, fab1, fab2;
     DBUserHelper dbUserHelper;
     ListView friendsListView;
+    LinearLayout man_find_layout;
+    EditText man_find_edit;
+    Button man_find_button;
     public static FriendAdapter adapter;
     //EditText findUserText;
     String friendsPhone;
     public static List<Friend> friends;
+    List<Friend> allFriendList;
     //ImageButton findUserButton;
     SharedPreferences auto;
     String sender;
@@ -66,11 +75,14 @@ public class ManFragment extends Fragment implements View.OnClickListener{
         v = inflater.inflate(R.layout.fragment_man, container, false);
         initFab();
         friendsListView = (ListView) v.findViewById(R.id.friendsListView);
-
-        if(dbUserHelper == null)
+        if (dbUserHelper == null)
             dbUserHelper = new DBUserHelper(getContext(),
                     "FRIENDSLIST", null, 1);
         friends = dbUserHelper.getAllFriends();
+        allFriendList = new ArrayList<>();
+        allFriendList.addAll(friends);
+
+        Log.e("getNum", allFriendList.size()+"");
 
         adapter = new FriendAdapter(getContext(),
                 R.layout.my_friends, friends);
@@ -88,7 +100,45 @@ public class ManFragment extends Fragment implements View.OnClickListener{
         return v;
     }
 
-    public void initFab(){
+    public void initFab() {
+        man_find_layout = (LinearLayout) v.findViewById(R.id.man_find_layout);
+        man_find_edit = (EditText) v.findViewById(R.id.man_find_edit);
+        man_find_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int s, int i1, int i2) {
+                String findWord = man_find_edit.getText().toString();
+                friends.clear();
+                for(int i=0; i<allFriendList.size(); i++){
+                    if(allFriendList.get(i).getPhone().contains(findWord) ||
+                            allFriendList.get(i).getName().contains(findWord)) {
+                        friends.add(allFriendList.get(i));
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        man_find_button = (Button) v.findViewById(R.id.man_find_button);
+        man_find_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                friends.clear();
+                friends.addAll(allFriendList);
+                adapter.notifyDataSetChanged();
+                man_find_edit.setText("");
+                man_find_layout.setVisibility(View.GONE);
+            }
+        });
+
         fab = (FloatingActionButton) v.findViewById(R.id.fab);
         fab1 = (FloatingActionButton) v.findViewById(R.id.fab1);
         fab2 = (FloatingActionButton) v.findViewById(R.id.fab2);
@@ -124,6 +174,7 @@ public class ManFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.fab2:
                 // search friend
+                man_find_layout.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -200,7 +251,6 @@ public class ManFragment extends Fragment implements View.OnClickListener{
             }
         });
         */
-
 
 
 }
