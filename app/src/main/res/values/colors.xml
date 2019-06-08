@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#7030a0</color>
     <color name="colorAccent">#D81B60</color>
     <color name="typing">#a840ff </color>
+    <color name="spaceGray">#808080 </color>
 
 </resources>

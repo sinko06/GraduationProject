@@ -110,6 +110,13 @@ public class LoginActivity extends BaseActivity implements
         updateUI(null);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+        finish();
+    }
+
     private void sendEmailVerification() {
         // Disable button
         findViewById(R.id.verify_email_button).setEnabled(false);

@@ -12,20 +12,22 @@
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/navigation" />
+        app:labelVisibilityMode="unlabeled"
+        app:itemBackground="@color/colorPrimaryDark"
+        app:itemIconTint="@drawable/select_bottom_navigation"
+        app:itemIconSize="40dp"
+        android:clipChildren="false"
+        app:menu="@menu/navigation" >
+    </android.support.design.widget.BottomNavigationView>
 
-    <include layout="@layout/content_main"
+    <include
+        layout="@layout/content_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/line_devider"/>
+        android:layout_above="@id/navigation"
+        android:layout_marginBottom="0dp" />
 
-    <View
-        android:id="@+id/line_devider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@+id/navigation"
-        android:background="#000000"/>
+
 
 </RelativeLayout>

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         manager.beginTransaction().replace(R.id.content_main, new ManFragment()).commit();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
