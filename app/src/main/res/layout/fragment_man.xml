@@ -7,19 +7,36 @@
     android:orientation="vertical"
     tools:context=".ManFragment">
 
-    <ListView
-        android:id="@+id/friendsListView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
-    </ListView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_bg_horizon"
+            android:text="CONTACT"
+            android:paddingVertical="10dp"
+            android:paddingLeft="40dp"
+            android:textColor="#ffffff"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title" />
+
+        <ListView
+            android:id="@+id/friendsListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="55dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -51,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:clickable="true"
-            app:backgroundTint="@color/colorPrimaryDark"
+            app:backgroundTint="#9b47e5"
             app:fabSize="normal"
             android:elevation="6dp"
             app:srcCompat="@drawable/add" />

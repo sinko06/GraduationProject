@@ -5,39 +5,44 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.luseen.spacenavigation.SpaceItem;
+import com.luseen.spacenavigation.SpaceNavigationView;
+import com.luseen.spacenavigation.SpaceOnClickListener;
+
 public class MainActivity extends AppCompatActivity {
 
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            FragmentManager manager = getSupportFragmentManager();
-            switch (item.getItemId()) {
-                case R.id.navigation_man:
-                    manager.beginTransaction().replace(R.id.content_main, new ManFragment()).commit();
-                    return true;
-                case R.id.navigation_emotion:
-                    manager.beginTransaction().replace(R.id.content_main, new Emotion_Fragment()).commit();
-                    return true;
-                case R.id.navigation_chat:
-                    manager.beginTransaction().replace(R.id.content_main, new ChatFragment()).commit();
-                    return true;
-                case R.id.navigation_music:
-                    manager.beginTransaction().replace(R.id.content_main, new MusicFragment()).commit();
-                    return true;
-                case R.id.navigation_setting:
-                    manager.beginTransaction().replace(R.id.content_main, new SettingFragment()).commit();
-                    return true;
-            }
-            return false;
-        }
-    };
+//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+//
+//        @Override
+//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//            FragmentManager manager = getSupportFragmentManager();
+//            switch (item.getItemId()) {
+//                case R.id.navigation_man:
+//                    manager.beginTransaction().replace(R.id.content_main, new ManFragment()).commit();
+//                    return true;
+//                case R.id.navigation_emotion:
+//                    manager.beginTransaction().replace(R.id.content_main, new Emotion_Fragment()).commit();
+//                    return true;
+//                case R.id.navigation_chat:
+//                    manager.beginTransaction().replace(R.id.content_main, new ChatFragment()).commit();
+//                    return true;
+//                case R.id.navigation_music:
+//                    manager.beginTransaction().replace(R.id.content_main, new MusicFragment()).commit();
+//                    return true;
+//                case R.id.navigation_setting:
+//                    manager.beginTransaction().replace(R.id.content_main, new SettingFragment()).commit();
+//                    return true;
+//            }
+//            return false;
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +51,48 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.content_main, new ManFragment()).commit();
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        BottomNavigationHelper.disableShiftMode(navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        final SpaceNavigationView spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
+        spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
+        spaceNavigationView.addSpaceItem(new SpaceItem("home", R.drawable.menu_man));
+        spaceNavigationView.addSpaceItem(new SpaceItem("emotion", R.drawable.menu_emotion));
+        spaceNavigationView.addSpaceItem(new SpaceItem("music", R.drawable.menu_music));
+        spaceNavigationView.addSpaceItem(new SpaceItem("setting", R.drawable.menu_setting));
+        spaceNavigationView.showIconOnly();
+        spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
+            @Override
+            public void onCentreButtonClick() {
+                FragmentManager manager = getSupportFragmentManager();
+                manager.beginTransaction().replace(R.id.content_main, new ChatFragment()).commit();
+            }
+
+            @Override
+            public void onItemClick(int itemIndex, String itemName) {
+                clickMenu(itemIndex);
+            }
+
+            @Override
+            public void onItemReselected(int itemIndex, String itemName) {
+                clickMenu(itemIndex);
+            }
+        });
+    }
+
+    public void clickMenu(int itemIndex){
+        FragmentManager manager = getSupportFragmentManager();
+        switch (itemIndex) {
+            case 0:
+                manager.beginTransaction().replace(R.id.content_main, new ManFragment()).commit();
+                break;
+            case 1:
+                manager.beginTransaction().replace(R.id.content_main, new Emotion_Fragment()).commit();
+                break;
+            case 2:
+                manager.beginTransaction().replace(R.id.content_main, new MusicFragment()).commit();
+                break;
+            case 3:
+                manager.beginTransaction().replace(R.id.content_main, new SettingFragment()).commit();
+                break;
+        }
     }
 
     private long backKeyPressedTime = 0;

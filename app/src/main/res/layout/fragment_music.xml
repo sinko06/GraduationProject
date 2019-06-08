@@ -42,6 +42,14 @@
                 android:layout_gravity="center" />
 
         </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MUSIC"
+            android:paddingVertical="10dp"
+            android:paddingLeft="40dp"
+            android:textColor="#ffffff"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title" />
 
         <!--<ImageButton-->
             <!--android:id="@+id/findUserButton"-->

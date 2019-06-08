@@ -7,43 +7,59 @@
     android:orientation="vertical"
     tools:context=".SettingFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/gradient_bg"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/circle"
-            android:backgroundTint="#ffffff"
-            app:srcCompat="@drawable/profile_boy" />
-
-        <TextView
-            android:id="@+id/my_profile_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="#ffffff" />
+            android:background="@drawable/gradient_bg"
+            android:orientation="vertical">
 
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/circle"
+                android:backgroundTint="#ffffff"
+                app:srcCompat="@drawable/profile_boy" />
+
+            <TextView
+                android:id="@+id/my_profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/my_profile_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
         <TextView
-            android:id="@+id/my_profile_phone"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
+            android:paddingVertical="10dp"
+            android:paddingLeft="40dp"
+            android:text="SETTING"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
             android:textColor="#ffffff" />
-    </LinearLayout>
+    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="40dp"
         android:layout_marginLeft="60dp"
+        android:layout_marginRight="40dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -71,8 +87,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:layout_width="0dp"
@@ -93,8 +109,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:layout_width="0dp"
@@ -105,11 +121,11 @@
             <Button
                 android:id="@+id/button_reset"
                 android:layout_width="0dp"
-                android:layout_weight="5"
                 android:layout_height="40dp"
-                android:paddingLeft="30dp"
-                android:gravity="left|center_vertical"
+                android:layout_weight="5"
                 android:background="@android:color/transparent"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="30dp"
                 android:text="데이터 초기화" />
         </LinearLayout>
 
