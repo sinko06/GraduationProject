@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
         sb.append(" CREATE TABLE " + dbname + " ( ");
         sb.append(" TIME INTEGER PRIMARY KEY, ");
         sb.append(" SENDER TEXT, ");
-        sb.append(" TYPE TEXT, ");
+        sb.append(" TYPE INTEGER, ");
         sb.append(" MESSAGE TEXT ) ");
 
         //SQLite Database로 쿼리실행
@@ -48,7 +48,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
     }
 
-    public void addMessage(long time, String sender, String type, String msg){
+    public void addMessage(long time, String sender, long type, String msg){
         SQLiteDatabase db = getWritableDatabase();
 
         StringBuffer sb = new StringBuffer();
@@ -72,7 +72,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         while( cursor.moveToNext() ) {
             msgs.add(new MessageFormat("", cursor.getString(1), "",
-                    cursor.getString(2), cursor.getString(3), cursor.getLong(0)));
+                    cursor.getLong(2), cursor.getString(3), cursor.getLong(0)));
         }
         cursor.moveToFirst();
         cursor.close();

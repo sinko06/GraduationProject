@@ -66,6 +66,7 @@ public class SettingFragment extends Fragment {
         auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
         myPhone = auto.getString("phone", null);
         myName = auto.getString("name", null);
+        getPermission();
 
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -90,7 +91,6 @@ public class SettingFragment extends Fragment {
         update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getPermission();
                 // 전화번호부에 있는 친구 목록
                 Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 String[] projection = new String[]{

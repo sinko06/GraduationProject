@@ -5,12 +5,12 @@ public class MessageFormat {
     private String uniqueID;
     private String sender;
     private String receiver;
-    private String type;
+    private long type;
     private String data;
     private long time;
 
     public MessageFormat(String uniqueID, String sender, String receiver
-            , String type, String data, long time) {
+            , long type, String data, long time) {
         this.sender = sender;
         this.receiver = receiver;
         this.type = type;
@@ -43,11 +43,11 @@ public class MessageFormat {
         this.receiver = receiver;
     }
 
-    public String getType() {
+    public long getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(long type) {
         this.type = type;
     }
 

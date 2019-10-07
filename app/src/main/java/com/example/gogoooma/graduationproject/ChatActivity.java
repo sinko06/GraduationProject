@@ -2,9 +2,12 @@ package com.example.gogoooma.graduationproject;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import java.io.*;
+import java.net.*;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -20,6 +24,8 @@ import com.github.nkzawa.emitter.Emitter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +36,11 @@ public class ChatActivity extends AppCompatActivity {
     private EditText textField;
     private ImageButton sendButton;
     List<MessageFormat> messageList;
-
+    java.net.Socket socket;
     public static String uniqueId;
 
-    private String type = "text";
-    Friend friend;
+    private long type = 0;
+    public static Friend friend;
     SharedPreferences auto;
     public static String sender;
 
@@ -48,17 +54,19 @@ public class ChatActivity extends AppCompatActivity {
     private DBHelper dbHelper;
     private DBRoomHelper dbRoomHelper;
 
+    Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        handler = new Handler();
         auto = getSharedPreferences("savefile", Activity.MODE_PRIVATE);
         sender = auto.getString("phone", null);
 
-
         try {
-            //mSocket = IO.socket("http://192.168.26.214:2000");
-            mSocket = IO.socket("http://" + SettingFragment.ipnum + ":2000");
+            mSocket = IO.socket("http://172.16.45.248:8080");
+            //mSocket = IO.socket("http://" + SettingFragment.ipnum + ":2000");
         } catch (URISyntaxException e) {
         }
         friend = (Friend) getIntent().getSerializableExtra("friend");
@@ -142,14 +150,14 @@ public class ChatActivity extends AppCompatActivity {
                     String e_uniqueID;
                     String e_sender;
                     String e_receiver;
-                    String e_type;
+                    long e_type;
                     String e_data;
                     long e_time;
                     try {
                         e_uniqueID = data.getString("uniqueID");
                         e_sender = data.getString("sender");
                         e_receiver = data.getString("receiver");
-                        e_type = data.getString("type");
+                        e_type = data.getLong("type");
                         e_data = data.getString("data");
                         e_time = data.getLong("time");
 
@@ -173,7 +181,45 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
+    String strScore;
+    class ClientThread extends Thread{
+        @Override
+        public void run() {
+            try{
+                socket=new java.net.Socket();
+                SocketAddress addr = new InetSocketAddress("192.168.23.77",2004);
+                socket.connect(addr);
+
+                DataOutputStream dout =new DataOutputStream(socket.getOutputStream());
+                DataInputStream din=new DataInputStream(socket.getInputStream());
+
+                dout.writeUTF(textField.getText().toString());
+                dout.flush();
+
+                strScore = din.readUTF();//in.readLine();
+                //System.out.println(str);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), strScore, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                dout.close();
+                din.close();
+                socket.close();
+            }
+
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void sendMessage(View view){
+        ClientThread thread = new ClientThread();
+        thread.start();
+        ////////////////////////////
         String message = textField.getText().toString().trim();
         if(TextUtils.isEmpty(message)){
             return;
