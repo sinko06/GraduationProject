@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.content_main, new ManFragment()).commit();
-
+        //hello
         final SpaceNavigationView spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("home", R.drawable.menu_man));
