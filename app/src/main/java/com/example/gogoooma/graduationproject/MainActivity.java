@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         getPermission();
         GetAllMp3Path();
         new process().execute();
-        //hello
         final SpaceNavigationView spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("home", R.drawable.menu_man));
