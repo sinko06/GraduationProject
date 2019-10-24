@@ -40,7 +40,7 @@ import java.util.List;
  */
 public class ChatFragment extends Fragment {
     View v;
-    ListView listView;
+    ListView listView;//asdf
     DBRoomHelper dbRoomHelper;
     List<Talk> talkList;
     public ChatFragment() {
