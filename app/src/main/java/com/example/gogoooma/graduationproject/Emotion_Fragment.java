@@ -36,6 +36,7 @@ public class Emotion_Fragment extends Fragment {
 
     public Emotion_Fragment() {
         // Required empty public constructor
+
     }
 
 
@@ -45,7 +46,7 @@ public class Emotion_Fragment extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_emotion_, container, false);
         ViewPager viewPager = (ViewPager) v.findViewById(R.id.pager);
-        MyPageAdapter myPagerAdapter = new MyPageAdapter(getActivity().getSupportFragmentManager());
+        MyPageAdapter myPagerAdapter = new MyPageAdapter(getChildFragmentManager());
         viewPager.setAdapter(myPagerAdapter);
         TabLayout tablayout = (TabLayout) v.findViewById(R.id.tablayout);
         tablayout.setupWithViewPager(viewPager);
