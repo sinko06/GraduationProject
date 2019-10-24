@@ -33,6 +33,7 @@ import java.util.UUID;
 
 
 public class ChatActivity extends AppCompatActivity {
+    private Emoji emoji;
     private EditText textField;
     private ImageButton sendButton;
     List<MessageFormat> messageList;
@@ -60,6 +61,8 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        emoji = new Emoji();
         handler = new Handler();
         auto = getSharedPreferences("savefile", Activity.MODE_PRIVATE);
         sender = auto.getString("phone", null);
@@ -221,6 +224,8 @@ public class ChatActivity extends AppCompatActivity {
         thread.start();
         ////////////////////////////
         String message = textField.getText().toString().trim();
+        emoji.checkEmoji(message);
+        String real_message = emoji.checkEmoji(message);
         if(TextUtils.isEmpty(message)){
             return;
         }
@@ -242,11 +247,11 @@ public class ChatActivity extends AppCompatActivity {
         mSocket.emit("chat message", jsonObject);
         messageList.add(new MessageFormat(friend.getName(), sender, friend.getName(), type, message, 0));
         messageAdapter.notifyDataSetChanged();
-        dbHelper.addMessage(time, sender, type, message);
+        dbHelper.addMessage(time, sender, type, real_message);
         try{
-            dbRoomHelper.addTalk(m_receiver, friend.getName(), message, time);
+            dbRoomHelper.addTalk(m_receiver, friend.getName(), real_message, time);
         }catch (Exception e){
-            dbRoomHelper.updateTalk(m_receiver, message, time);
+            dbRoomHelper.updateTalk(m_receiver, real_message, time);
         }
     }
 
