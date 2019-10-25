@@ -81,9 +81,21 @@ public class MusicFragment extends Fragment {
         TextView tv2 = (TextView) v.findViewById(R.id.music_profile_phone);
         TextView musicnumText = (TextView)v.findViewById(R.id.my_music_1_2);
         TextView emotionScoreText = (TextView)v.findViewById(R.id.my_music_2_2);
+        TextView my_music_3_2_Text = (TextView)v.findViewById(R.id.my_music_3_2);
         fabbutton = (FloatingActionButton) v.findViewById(R.id.stopFab);
 
         emotionScoreText.setText(String.valueOf(emotion) + " 점");
+        if(emotion >=0 && emotion <20){
+            my_music_3_2_Text.setText("매우 안 좋음");
+        }else if(emotion >= 20 && emotion <40){
+            my_music_3_2_Text.setText("안 좋음");
+        }else if(emotion >= 40 && emotion <60){
+            my_music_3_2_Text.setText("평범");
+        }else if(emotion >= 60 && emotion <80){
+            my_music_3_2_Text.setText("좋음");
+        }else if(emotion >= 80 && emotion <= 100){
+            my_music_3_2_Text.setText("매우 좋음");
+        }
         auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
         tv1.setText(auto.getString("name", null));
         tv2.setText(auto.getString("phone", null));

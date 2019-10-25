@@ -52,9 +52,9 @@ public class Emotion_Fragment_Circle extends Fragment {
         ArrayList PieEntryLabels;
 
         pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(2f, "한등희"));
-        pieEntries.add(new PieEntry(4f, "최승호"));
-        pieEntries.add(new PieEntry(6f, "김영일"));
+        pieEntries.add(new PieEntry(5f, "송교희"));
+        pieEntries.add(new PieEntry(6f, "최승호"));
+        //pieEntries.add(new PieEntry(6f, "김영일"));
 
         pieDataSet = new PieDataSet(pieEntries, "");
         pieData = new PieData(pieDataSet);
@@ -67,9 +67,9 @@ public class Emotion_Fragment_Circle extends Fragment {
 
 
         pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(4f, "한등희"));
-        pieEntries.add(new PieEntry(3f, "최승호"));
-        pieEntries.add(new PieEntry(6f, "김영일"));
+        pieEntries.add(new PieEntry(5f, "송교희"));
+        pieEntries.add(new PieEntry(6f, "최승호"));
+        //pieEntries.add(new PieEntry(6f, "김영일"));
 
         pieDataSet = new PieDataSet(pieEntries, "");
         pieData = new PieData(pieDataSet);

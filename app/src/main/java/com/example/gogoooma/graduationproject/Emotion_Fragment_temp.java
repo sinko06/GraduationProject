@@ -61,11 +61,11 @@ public class Emotion_Fragment_temp extends Fragment {
         lineChart.setMarker(marker);
 
         List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(1, 10));
-        entries.add(new Entry(2, 20));
-        entries.add(new Entry(3, 0));
-        entries.add(new Entry(4, 40));
-        entries.add(new Entry(5, 30));
+        entries.add(new Entry(1, 89));
+        entries.add(new Entry(2, 87));
+        entries.add(new Entry(3, 93));
+        entries.add(new Entry(4, 91));
+        entries.add(new Entry(5, 90));
 
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             lineChart.setHardwareAccelerationEnabled(false);
@@ -109,7 +109,7 @@ public class Emotion_Fragment_temp extends Fragment {
                 // return the string va
                 Calendar cal = new GregorianCalendar(Locale.KOREA);
                 cal.setTime(new Date());
-                cal.add(Calendar.DAY_OF_YEAR, (int)value-5); // 하루를 더한다.
+                cal.add(Calendar.DAY_OF_YEAR, (int)value-6); // 하루를 더한다.
                 SimpleDateFormat fm = new SimpleDateFormat(
                         "MM월dd일");
                 String strDate = fm.format(cal.getTime());

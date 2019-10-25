@@ -7,24 +7,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:layout_marginBottom="30dp"
-        android:layout_height="match_parent"><![CDATA[
+        android:orientation="vertical"><![CDATA[
 
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        ]]>
 
-        <TextView
-            android:id="@+id/ccolo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
-            android:text="■ 이번주 기분"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/colorPrimaryDark" />
+
+        ]]>
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
@@ -32,33 +24,52 @@
             android:layout_height="300dp"
             android:layout_margin="10dp" />
 
-        <LinearLayout
+  <!--      <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp">
 
-            <Button
-                android:id="@+id/emotion_calendar1"
+            <TextView
+                android:text="6일전"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@color/colorPrimaryDark"
-                android:text="시작날짜"
-                android:textColor="#ffffff" />
-
-            <Button
-                android:id="@+id/emotion_calendar2"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="5일전"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@color/colorPrimaryDark"
-                android:text="종료날짜"
-                android:textColor="#ffffff" />
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="4일전"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="3일전"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="2일전"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="어제"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="오늘"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
         </LinearLayout>
-
-
+-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"/>
 
 
     </LinearLayout>

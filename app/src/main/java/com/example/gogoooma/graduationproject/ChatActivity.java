@@ -115,7 +115,7 @@ public class ChatActivity extends AppCompatActivity {
         }catch (Exception e){}
         messageAdapter = new MessageAdapter(this, R.layout.item_message, messageList);
         messageListView.setAdapter(messageAdapter);
-
+        messageListView.setSelection(messageAdapter.getCount() - 1);
         onTypeButtonEnable();
     }
 
@@ -231,7 +231,7 @@ public class ChatActivity extends AppCompatActivity {
 
     public void sendMessage(View view){
         String message = textField.getText().toString().trim();
-        emoji.checkEmoji(message);
+        //emoji.checkEmoji(message);
         real_message = emoji.checkEmoji(message);
         nowName = "me";
         ClientThread thread = new ClientThread();
@@ -259,12 +259,13 @@ public class ChatActivity extends AppCompatActivity {
         mSocket.emit("chat message", jsonObject);
         messageList.add(new MessageFormat(friend.getName(), sender, friend.getName(), 0, message, 0));
         messageAdapter.notifyDataSetChanged();
-        dbHelper.addMessage(time, sender, 0, real_message);
+
+        dbHelper.addMessage(time, sender, 0, message);
 
         try{
-            dbRoomHelper.addTalk(m_receiver, friend.getName(), real_message, time);
+            dbRoomHelper.addTalk(m_receiver, friend.getName(), message, time);
         }catch (Exception e){
-            dbRoomHelper.updateTalk(m_receiver, real_message, time);
+            dbRoomHelper.updateTalk(m_receiver, message, time);
         }
     }
 
