@@ -14,11 +14,10 @@ public class AmpZero {
     float sum;
     float in[][];
     int count = 0;
-    public float[][] Test (final String[] str) throws FileNotFoundException {
+    public float[][] Test (final String str) throws FileNotFoundException {
 
-        in = new float[str.length][1000];
-        for(int i=0; i<str.length ;i++) {
-            File file = new File(str[i]);
+        in = new float[1][1000];
+            File file = new File(str);
             sum = 0;
             k=0;
             final int bufferSize = 4096;
@@ -38,7 +37,7 @@ public class AmpZero {
                         sum = sum + amplitudes[j];
                         k++;
                         if(k<=1000000 && k%1000==0){
-                            in[count][k/1000-1] = sum/1000;
+                            in[0][k/1000-1] = sum/1000;
                             sum = 0;
                         }
                     }
@@ -51,11 +50,7 @@ public class AmpZero {
                 }
             });
             audioDispatcher.run();
-            count++;
-        }
-
-        return in;
-
+            return in;
     }
 
 }

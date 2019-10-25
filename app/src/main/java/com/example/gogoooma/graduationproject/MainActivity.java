@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -31,13 +33,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 import be.tarsos.dsp.io.android.AndroidFFMPEGLocator;
 
 public class MainActivity extends AppCompatActivity {
     String[] resultPath = null;
-    float[][] input;
-
+    DBMusicHelper helper;
+    SQLiteDatabase database;
 
 //    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
 //            = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -74,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         manager.beginTransaction().replace(R.id.content_main, new ManFragment()).commit();
         new AndroidFFMPEGLocator(this);
         getPermission();
+        helper = new DBMusicHelper(MainActivity.this, "musiclist", null, 1);
+        database = helper.getWritableDatabase();
         GetAllMp3Path();
         new process().execute();
         final SpaceNavigationView spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
@@ -191,7 +197,27 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             try {
-                input = new AmpZero().Test(resultPath);
+                List<Music> musicArrayList =  helper.getAllMusic();
+                List<String> musictitlelist = new ArrayList();
+                for(int i=0; i< musicArrayList.size();i++){
+                    musictitlelist.add(musicArrayList.get(i).Title);
+                }
+                for(int i=0; i< resultPath.length;i++){
+                    String[] titlelen = resultPath[i].split("/");
+                    String title = titlelen[titlelen.length-1];
+                    if(!(musictitlelist.contains(title))){
+                        float[][] input;
+                        input = new AmpZero().Test(resultPath[i]);
+                        float[][] output = new float[1][2];
+                        float[][][][] new_input = new float[1][1][1000][1];
+                        for(int j=0; j< 1000;j++){
+                            new_input[0][0][j][0] = input[0][j];
+                        }
+                        Interpreter tflite = getTfliteInterpreter("amp_keras.tflite");
+                        tflite.run(new_input,output);
+                        helper.addMusic(title, output[0][0]);
+                    }
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
