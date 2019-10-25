@@ -27,6 +27,8 @@ public class Emotion_Fragment_Total extends Fragment {
     View v;
     TextView text2, cardtv1, cardtv2, cardtv3;
     CardView c1,c2,c3;
+    private DBEmotionHelper dbEmotionHelper;
+
 
     public Emotion_Fragment_Total() {
         // Required empty public constructor
@@ -38,12 +40,17 @@ public class Emotion_Fragment_Total extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_emotion_total, container, false);
+        dbEmotionHelper = new DBEmotionHelper(getContext(),
+                "EMOTIONLIST", null, 1);
+        int score = dbEmotionHelper.getEmotion("me");
+
         ImageView gifpy = (ImageView) v.findViewById(R.id.imageView);
         Glide.with(getContext())
                 .load(R.drawable.giphy)
                 .apply(new RequestOptions().placeholder(R.drawable.giphy))
                 .into(new DrawableImageViewTarget(gifpy));
-        text2 = (TextView) v.findViewById(R.id.emotion_total_text2);
+        text2 = (TextView) v.findViewById(R.id.emotion_total_score1);
+        text2.setText(""+score);
         cardtv1 = (TextView) v.findViewById(R.id.tvcard1);
         cardtv2 = (TextView) v.findViewById(R.id.tvcard2);
         cardtv3 = (TextView) v.findViewById(R.id.tvcard3);
@@ -77,7 +84,6 @@ public class Emotion_Fragment_Total extends Fragment {
                 startActivity(webIntent);
             }
         });
-        int score = 75;
         if(100 >= score && score > 60) {
             text2.setText("오늘 기분이 좋으시군요!");
             cardtv1.setText("기분 좋을 때");

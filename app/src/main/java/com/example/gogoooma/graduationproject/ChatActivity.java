@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -36,11 +37,12 @@ public class ChatActivity extends AppCompatActivity {
     private Emoji emoji;
     private EditText textField;
     private ImageButton sendButton;
+    String real_message;
     List<MessageFormat> messageList;
     java.net.Socket socket;
     public static String uniqueId;
+    String nowName;
 
-    private long type = 0;
     public static Friend friend;
     SharedPreferences auto;
     public static String sender;
@@ -54,21 +56,20 @@ public class ChatActivity extends AppCompatActivity {
 
     private DBHelper dbHelper;
     private DBRoomHelper dbRoomHelper;
+    private DBEmotionHelper dbEmotionHelper;
 
     Handler handler;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         emoji = new Emoji();
         handler = new Handler();
         auto = getSharedPreferences("savefile", Activity.MODE_PRIVATE);
         sender = auto.getString("phone", null);
 
         try {
-            mSocket = IO.socket("http://172.16.45.248:8080");
+            mSocket = IO.socket("http://192.168.86.193:8080");
             //mSocket = IO.socket("http://" + SettingFragment.ipnum + ":2000");
         } catch (URISyntaxException e) {
         }
@@ -77,6 +78,9 @@ public class ChatActivity extends AppCompatActivity {
                 friend.getPhone(), null, 1);
         dbRoomHelper = new DBRoomHelper(getApplicationContext(),
                 "TALKLIST", null, 1);
+        dbEmotionHelper = new DBEmotionHelper(getApplicationContext(),
+                "EMOTIONLIST", null, 1);
+
         uniqueId = UUID.randomUUID().toString();
         if(savedInstanceState != null){
             hasConnection = savedInstanceState.getBoolean("hasConnection");
@@ -170,6 +174,9 @@ public class ChatActivity extends AppCompatActivity {
                         // DBHelper sqlite에 넣기
                         dbHelper.addMessage(e_time, e_sender, e_type, e_data);
                         // 처음이라면 DBUserHelper에도 넣고 아니라면 시간 갱신
+                        nowName = friend.getName();
+                        ClientThread thread = new ClientThread();
+                        thread.start();
                         try{
                             dbRoomHelper.addTalk(e_sender, friend.getName(), e_data, e_time);
                         }catch (Exception e){
@@ -190,23 +197,26 @@ public class ChatActivity extends AppCompatActivity {
         public void run() {
             try{
                 socket=new java.net.Socket();
-                SocketAddress addr = new InetSocketAddress("192.168.23.77",2004);
+                SocketAddress addr = new InetSocketAddress("192.168.86.193",2004);
                 socket.connect(addr);
 
                 DataOutputStream dout =new DataOutputStream(socket.getOutputStream());
                 DataInputStream din=new DataInputStream(socket.getInputStream());
 
-                dout.writeUTF(textField.getText().toString());
+                dout.writeUTF(real_message);
                 dout.flush();
 
                 strScore = din.readUTF();//in.readLine();
                 //System.out.println(str);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), strScore, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                // DB에 점수 갱신
+                int tempScore = Math.round((Float.valueOf(strScore)));
+                try {
+                    dbEmotionHelper.addEmotion(nowName, tempScore);
+                } catch (Exception e){
+                    int score = dbEmotionHelper.getEmotion(nowName);
+                    score = Math.round(((score * 8) + (tempScore*10)) / 18);
+                    dbEmotionHelper.updateEmotion(nowName, score);
+                }
 
                 dout.close();
                 din.close();
@@ -220,12 +230,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void sendMessage(View view){
+        String message = textField.getText().toString().trim();
+        emoji.checkEmoji(message);
+        real_message = emoji.checkEmoji(message);
+        nowName = "me";
         ClientThread thread = new ClientThread();
         thread.start();
         ////////////////////////////
-        String message = textField.getText().toString().trim();
-        emoji.checkEmoji(message);
-        String real_message = emoji.checkEmoji(message);
+
         if(TextUtils.isEmpty(message)){
             return;
         }
@@ -237,7 +249,7 @@ public class ChatActivity extends AppCompatActivity {
             jsonObject.put("uniqueID", uniqueId);
             jsonObject.put("sender", sender);
             jsonObject.put("receiver", m_receiver);
-            jsonObject.put("type", type);
+            jsonObject.put("type", 0);
             jsonObject.put("data", message);
             jsonObject.put("time", time);
 
@@ -245,9 +257,10 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         mSocket.emit("chat message", jsonObject);
-        messageList.add(new MessageFormat(friend.getName(), sender, friend.getName(), type, message, 0));
+        messageList.add(new MessageFormat(friend.getName(), sender, friend.getName(), 0, message, 0));
         messageAdapter.notifyDataSetChanged();
-        dbHelper.addMessage(time, sender, type, real_message);
+        dbHelper.addMessage(time, sender, 0, real_message);
+
         try{
             dbRoomHelper.addTalk(m_receiver, friend.getName(), real_message, time);
         }catch (Exception e){

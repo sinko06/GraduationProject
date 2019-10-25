@@ -53,8 +53,9 @@ public class MusicFragment extends Fragment {
     SharedPreferences auto;
     private ArrayList<Song_Item> songsList = null; // 데이터 리스트
     private ListViewAdapter listViewAdapter = null; // 리스트뷰에 사용되는 ListViewAdapter
+    private DBEmotionHelper dbEmotionHelper;
 
-    int emotion = 90;
+    int emotion = 0;
     int musicnum = 0;
     List<Music> musicArrayList;
     List<String> musictitlelist;
@@ -72,6 +73,9 @@ public class MusicFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_music, container, false);
+        dbEmotionHelper = new DBEmotionHelper(getContext(),
+                "EMOTIONLIST", null, 1);
+        emotion = dbEmotionHelper.getEmotion("me");
         audiolistView = (ListView) v.findViewById(R.id.musiclistview);
         TextView tv1 = (TextView) v.findViewById(R.id.music_profile_name);
         TextView tv2 = (TextView) v.findViewById(R.id.music_profile_phone);
