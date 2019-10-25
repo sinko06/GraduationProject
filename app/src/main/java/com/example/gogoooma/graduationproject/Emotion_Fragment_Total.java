@@ -9,6 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 
 
 /**
@@ -27,6 +32,13 @@ public class Emotion_Fragment_Total extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_emotion_total, container, false);
+        ImageView gifpy = (ImageView) v.findViewById(R.id.imageView);
+        Glide.with(getContext())
+                .load(R.drawable.giphy)
+                .apply(new RequestOptions().placeholder(R.drawable.giphy))
+                .into(new DrawableImageViewTarget(gifpy));
+
+
 
         return v;
     }
