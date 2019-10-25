@@ -70,7 +70,119 @@
         </RelativeLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:id="@+id/emotion_total_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="helloworld"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="YouTube에서도 노래를 추천받아 보세요"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="140dp">
+            <!-- 첫 카드뷰 -->
+            <android.support.v7.widget.CardView
+                android:id="@+id/card1"
+                android:layout_margin="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFA196"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="15dp" >
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="10dp">
+                    <ImageView
+                        android:scaleType="fitCenter"
+                        android:tint="#ffffff"
+                        android:src="@drawable/menu_emotion"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+                    <TextView
+                        android:id="@+id/tvcard1"
+                        android:layout_width="match_parent"
+                        android:textColor="#ffffff"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <!-- 2째 카드뷰 -->
+            <android.support.v7.widget.CardView
+                android:id="@+id/card2"
+                android:layout_margin="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                app:cardElevation="8dp"
+                android:backgroundTint="#E889DB"
+                app:cardCornerRadius="15dp" >
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="10dp">
+                    <ImageView
+                        android:scaleType="fitXY"
+                        android:tint="#ffffff"
+                        android:src="@drawable/autism"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" />
+                    <TextView
+                        android:id="@+id/tvcard2"
+                        android:layout_width="match_parent"
+                        android:textColor="#ffffff"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <!-- 3째 카드뷰 -->
+            <android.support.v7.widget.CardView
+                android:id="@+id/card3"
+                android:layout_margin="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                app:cardElevation="8dp"
+                android:backgroundTint="#CAA3FF"
+                app:cardCornerRadius="15dp" >
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="10dp">
+                    <ImageView
+                        android:scaleType="fitXY"
+                        android:tint="#ffffff"
+                        android:src="@drawable/heart"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" />
+                    <TextView
+                        android:id="@+id/tvcard3"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:textColor="#ffffff"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
