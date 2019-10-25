@@ -2,8 +2,11 @@ package com.example.gogoooma.graduationproject;
 
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,17 +61,37 @@ public class Emotion_Fragment_temp extends Fragment {
         entries.add(new Entry(4, 40));
         entries.add(new Entry(5, 30));
 
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            lineChart.setHardwareAccelerationEnabled(false);
+        }
+
         LineDataSet lineDataSet = new LineDataSet(entries, "기분");
         lineDataSet.setLineWidth(2);
-        lineDataSet.setCircleRadius(6);
-        lineDataSet.setCircleColor(Color.parseColor("#666666"));
-        lineDataSet.setCircleHoleColor(Color.DKGRAY);
-        lineDataSet.setColor(Color.parseColor("#666666"));
+        lineDataSet.setCircleRadius(3);
+        lineDataSet.setCircleColor(Color.parseColor("#b386f4"));
+        lineDataSet.setCircleHoleColor(Color.WHITE);
+        lineDataSet.setColor(Color.parseColor("#b386f4"));//선
         lineDataSet.setDrawCircleHole(true);
         lineDataSet.setDrawCircles(true);
         lineDataSet.setDrawHorizontalHighlightIndicator(false);
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setDrawValues(false);
+
+        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        lineDataSet.setDrawFilled(true);
+        //lineDataSet.setGradientColor(R.color.graph_gradient, Color.WHITE);
+        //lineDataSet.setFillDrawable(drawable);
+        if (Utils.getSDKInt() >= 18) {
+            // fill drawable only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.gradient_emotion_graph);
+            lineDataSet.setFillDrawable(drawable);
+        }
+        else {
+            lineDataSet.setFillColor(getResources().getColor(R.color.sexy));
+        }
+        //lineDataSet.setFillColor(getResources().getColor(R.color.sexy));
+
+
 
         LineData lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);

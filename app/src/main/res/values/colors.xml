@@ -5,5 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="typing">#a840ff </color>
     <color name="spaceGray">#f7f7f7 </color>
+    <color name ="sexy">#C528FD</color>
+    <color name ="graph_gradient">#EEC5FF</color>
 
 </resources>
