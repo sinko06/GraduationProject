@@ -19,13 +19,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 
+import org.w3c.dom.Text;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Emotion_Fragment_Total extends Fragment {
     View v;
-    TextView text2, cardtv1, cardtv2, cardtv3;
+    TextView scoretv, text2, cardtv1, cardtv2, cardtv3;
     CardView c1,c2,c3;
     private DBEmotionHelper dbEmotionHelper;
 
@@ -43,14 +45,14 @@ public class Emotion_Fragment_Total extends Fragment {
         dbEmotionHelper = new DBEmotionHelper(getContext(),
                 "EMOTIONLIST", null, 1);
         int score = dbEmotionHelper.getEmotion("me");
-
+        scoretv = (TextView) v.findViewById(R.id.emotion_total_score1);
+        scoretv.setText(score+"");
         ImageView gifpy = (ImageView) v.findViewById(R.id.imageView);
         Glide.with(getContext())
                 .load(R.drawable.giphy)
                 .apply(new RequestOptions().placeholder(R.drawable.giphy))
                 .into(new DrawableImageViewTarget(gifpy));
-        text2 = (TextView) v.findViewById(R.id.emotion_total_score1);
-        text2.setText(""+score);
+        text2 = (TextView) v.findViewById(R.id.emotion_total_text2);
         cardtv1 = (TextView) v.findViewById(R.id.tvcard1);
         cardtv2 = (TextView) v.findViewById(R.id.tvcard2);
         cardtv3 = (TextView) v.findViewById(R.id.tvcard3);
