@@ -23,11 +23,17 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -97,6 +103,21 @@ public class Emotion_Fragment_temp extends Fragment {
         lineChart.setData(lineData);
 
         XAxis xAxis = lineChart.getXAxis();
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // return the string va
+                Calendar cal = new GregorianCalendar(Locale.KOREA);
+                cal.setTime(new Date());
+                cal.add(Calendar.DAY_OF_YEAR, (int)value-5); // 하루를 더한다.
+                SimpleDateFormat fm = new SimpleDateFormat(
+                        "MM월dd일");
+                String strDate = fm.format(cal.getTime());
+
+                return  strDate;
+            }
+        });
+        xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.rgb(97,12,177));
 
