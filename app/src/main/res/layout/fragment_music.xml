@@ -157,10 +157,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="65dp"
         android:layout_marginRight="22dp"
+        android:layout_marginBottom="65dp"
         android:clickable="true"
+        android:src="@android:drawable/ic_media_play"
         app:backgroundTint="#9b47e5"
-        app:fabSize="normal"
-       />
+        app:fabSize="normal" />
 </android.support.design.widget.CoordinatorLayout>
