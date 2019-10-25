@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 for(int i=0; i< resultPath.length;i++){
                     String[] titlelen = resultPath[i].split("/");
-                    String title = titlelen[titlelen.length-1];
+                    String title = titlelen[titlelen.length-1].replace(".mp3","");
                     if(!(musictitlelist.contains(title))){
                         float[][] input;
                         input = new AmpZero().Test(resultPath[i]);

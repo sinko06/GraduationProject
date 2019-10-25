@@ -10,15 +10,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -26,6 +30,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,11 +45,22 @@ import java.util.List;
 public class MusicFragment extends Fragment {
     View v;
     private DBHelper dbHelper;
+    DBMusicHelper musichelper;
+    SQLiteDatabase database;
+    MediaPlayer mp = new MediaPlayer();
     ListView audiolistView;
     ArrayAdapter<String> adapter;
     SharedPreferences auto;
     private ArrayList<Song_Item> songsList = null; // 데이터 리스트
     private ListViewAdapter listViewAdapter = null; // 리스트뷰에 사용되는 ListViewAdapter
+
+    int emotion = 90;
+    int musicnum = 0;
+    List<Music> musicArrayList;
+    List<String> musictitlelist;
+    List<Float> musichappylist;
+    ArrayList<String> musicFile = new ArrayList<>();
+    FloatingActionButton fabbutton;
 
     public MusicFragment() {
         // Required empty public constructor
@@ -55,19 +72,60 @@ public class MusicFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_music, container, false);
-        auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
+        audiolistView = (ListView) v.findViewById(R.id.musiclistview);
         TextView tv1 = (TextView) v.findViewById(R.id.music_profile_name);
         TextView tv2 = (TextView) v.findViewById(R.id.music_profile_phone);
+        TextView musicnumText = (TextView)v.findViewById(R.id.my_music_1_2);
+        TextView emotionScoreText = (TextView)v.findViewById(R.id.my_music_2_2);
+        fabbutton = (FloatingActionButton) v.findViewById(R.id.stopFab);
 
+        emotionScoreText.setText(String.valueOf(emotion) + " 점");
+        auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
         tv1.setText(auto.getString("name", null));
         tv2.setText(auto.getString("phone", null));
+        musichelper = new DBMusicHelper(getActivity(), "musiclist", null, 1);
+        database = musichelper.getWritableDatabase();
         songsList = new ArrayList<Song_Item>(); // ArrayList 생성
-        audiolistView = (ListView) v.findViewById(R.id.musiclistview);
+        musicArrayList =  musichelper.getAllMusic();
+        musictitlelist = new ArrayList();
+        musichappylist = new ArrayList();
+        for(int i=0; i< musicArrayList.size();i++){
+            musictitlelist.add(musicArrayList.get(i).Title);
+            musichappylist.add(musicArrayList.get(i).happy);
+        }
         listViewAdapter = new ListViewAdapter(getActivity()); // Adapter 생성
         audiolistView.setAdapter(listViewAdapter); // 어댑터를 리스트뷰에 세팅
         audiolistView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
+        audiolistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    if(mp.isPlaying()) {
+                        mp.stop();
+                    }
+                    mp = new MediaPlayer();
+                    mp.setDataSource(musicFile.get(position));
+                    mp.prepare();
+                    mp.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        fabbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mp.isPlaying()) {
+                    fabbutton.setImageResource(android.R.drawable.ic_media_play);
+                    mp.pause();
+                }else{
+                    fabbutton.setImageResource(android.R.drawable.ic_media_pause);
+                    mp.start();
+                }
+            }
+        });
         loadAudio();
+        musicnumText.setText(String.valueOf(musicnum) + " 개");
         return v;
     }
 
@@ -90,8 +148,19 @@ public class MusicFragment extends Fragment {
                 String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
                 long mDuration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                 String datapath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                String wholedata[] = datapath.split("/");
+                String realtitle = wholedata[wholedata.length-1].replace(".mp3","");
                 // Save to audioList
-                listViewAdapter.addItem(track_id, albumId, title, artist, album, mDuration, datapath);
+                for(int i=0; i< musictitlelist.size();i++){
+                    if(musictitlelist.get(i).equals(realtitle)){
+                        if(musichappylist.get(i)*100 >= emotion-10 && musichappylist.get(i)*100 <= emotion+10){
+                            listViewAdapter.addItem(track_id, albumId, title, artist, album, mDuration, datapath);
+                            musicFile.add(datapath);
+                            musicnum++;
+                        }
+                    }
+                }
+
             } while (cursor.moveToNext());
         }
         cursor.close();

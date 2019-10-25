@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context=".MusicFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="240dp">
@@ -52,14 +55,14 @@
             android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title" />
 
         <!--<ImageButton-->
-            <!--android:id="@+id/findUserButton"-->
-            <!--android:layout_width="30dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_margin="10dp"-->
-            <!--android:background="@android:color/transparent"-->
-            <!--android:src="@android:drawable/ic_menu_zoom" />-->
+        <!--android:id="@+id/findUserButton"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:src="@android:drawable/ic_menu_zoom" />-->
 
         <android.support.v7.widget.CardView
             android:layout_width="300dp"
@@ -144,6 +147,20 @@
         android:id="@+id/musiclistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </ListView>
-</LinearLayout>
+        />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/stopFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="65dp"
+        android:layout_marginRight="22dp"
+        android:clickable="true"
+        app:backgroundTint="#9b47e5"
+        app:fabSize="normal"
+       />
+</android.support.design.widget.CoordinatorLayout>
