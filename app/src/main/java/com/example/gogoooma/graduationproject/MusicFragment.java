@@ -123,6 +123,7 @@ public class MusicFragment extends Fragment {
                     mp.setDataSource(musicFile.get(position));
                     mp.prepare();
                     mp.start();
+                    fabbutton.setImageResource(android.R.drawable.ic_media_pause);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

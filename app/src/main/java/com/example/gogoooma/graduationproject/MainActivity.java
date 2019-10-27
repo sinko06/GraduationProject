@@ -209,9 +209,11 @@ public class MainActivity extends AppCompatActivity {
                         float[][] input;
                         input = new AmpZero().Test(resultPath[i]);
                         float[][] output = new float[1][2];
-                        float[][][][] new_input = new float[1][1][1000][1];
+                        float[][][][] new_input = new float[1][2][1000][1];
                         for(int j=0; j< 1000;j++){
                             new_input[0][0][j][0] = input[0][j];
+                            new_input[0][1][j][0] = input[1][j];
+
                         }
                         Interpreter tflite = getTfliteInterpreter("amp_keras.tflite");
                         tflite.run(new_input,output);
