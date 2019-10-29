@@ -189,7 +189,7 @@ public class SettingFragment extends Fragment {
                             SharedPreferences auto;
                             auto = getActivity().getSharedPreferences("savefile", Activity.MODE_PRIVATE);
                             if (auto.getString("phone", null) != null) {
-                                auto.edit().clear().commit();
+                                auto.edit().clear().apply();
                             }
                             String value = dataSnapshot.child(key).getValue().toString();
                             value = value.substring(1, value.length() - 1);
@@ -204,7 +204,7 @@ public class SettingFragment extends Fragment {
                             SharedPreferences.Editor autoLogin = auto.edit();
                             autoLogin.putString("phone", tempip.getText().toString());
                             autoLogin.putString("name", _name);
-                            autoLogin.commit();
+                            autoLogin.apply();
 
                             my_profile_name.setText(_name);
                             my_profile_phone.setText(tempip.getText().toString());

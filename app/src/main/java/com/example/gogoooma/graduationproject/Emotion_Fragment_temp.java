@@ -1,15 +1,19 @@
 package com.example.gogoooma.graduationproject;
 
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
@@ -30,10 +34,13 @@ import com.github.mikephil.charting.utils.Utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -42,7 +49,7 @@ import java.util.Locale;
 public class Emotion_Fragment_temp extends Fragment {
     View v;
     private LineChart lineChart = null;
-    private PieChart pieChart, pieChart2;
+    TextView tv1, tv2, tv3, tv4, tv5, tv6;
 
     public Emotion_Fragment_temp() {
         // Required empty public constructor
@@ -139,6 +146,57 @@ public class Emotion_Fragment_temp extends Fragment {
         lineChart.getAxisLeft().setDrawGridLines(false);
         lineChart.getXAxis().setDrawGridLines(false);
         lineChart.invalidate();
+
+        tv1= (TextView) v.findViewById(R.id.emotion_line1);
+        tv2= (TextView) v.findViewById(R.id.emotion_line2);
+        tv3= (TextView) v.findViewById(R.id.emotion_line3);
+        tv4= (TextView) v.findViewById(R.id.emotion_line4);
+        tv5= (TextView) v.findViewById(R.id.emotion_line5);
+        tv6= (TextView) v.findViewById(R.id.emotion_line6);
+
+        SharedPreferences auto2, auto3;
+        List<Emotion> emotionWin = new ArrayList<>();
+        List<Emotion> emotionLose = new ArrayList<>();
+        auto2 = getActivity().getSharedPreferences("emotionwtext", Activity.MODE_PRIVATE);
+        auto3 = getActivity().getSharedPreferences("emotionltext", Activity.MODE_PRIVATE);
+        Map<String,?> keys = auto2.getAll();
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            emotionWin.add(new Emotion(entry.getKey(), auto2.getInt(entry.getKey(),0)));
+        }
+
+        Map<String,?> keys2 = auto3.getAll();
+        for(Map.Entry<String,?> entry : keys2.entrySet()){
+            emotionLose.add(new Emotion(entry.getKey(), auto3.getInt(entry.getKey(),0)));
+            Log.d("hello2", entry.getKey()+":"+ auto3.getInt(entry.getKey(),0));
+        }
+
+        Collections.sort(emotionWin);
+        Collections.sort(emotionLose);
+
+        int i=emotionWin.size()-1;
+        int j=0;
+        if(i>-1) {
+            tv1.setText(emotionWin.get(i).name);
+            i--;
+            if(i>-1) {
+                tv2.setText(emotionWin.get(i).name);
+                i--;
+            }
+            if(i>-1) {
+                tv3.setText(emotionWin.get(i).name);
+            }
+        }
+        if(j<emotionLose.size()) {
+            tv4.setText(emotionLose.get(j).name);
+            j++;
+            if(j<emotionLose.size()) {
+                tv5.setText(emotionLose.get(j).name);
+                j++;
+            }
+            if(j<emotionLose.size()) {
+                tv6.setText(emotionLose.get(j).name);
+            }
+        }
 
         return v;
     }

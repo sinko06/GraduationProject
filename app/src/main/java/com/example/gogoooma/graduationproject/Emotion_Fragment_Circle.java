@@ -1,10 +1,13 @@
 package com.example.gogoooma.graduationproject;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +32,8 @@ import java.util.List;
 
 public class Emotion_Fragment_Circle extends Fragment {
     View v;
-    private LineChart lineChart = null;
-    private PieChart pieChart, pieChart2;
+    private PieChart pieChart;
+    private DBEmotionHelper dbEmotionHelper;
 
     public Emotion_Fragment_Circle() {
         // Required empty public constructor
@@ -44,31 +47,23 @@ public class Emotion_Fragment_Circle extends Fragment {
         v = inflater.inflate(R.layout.fragment_emotion__fragment__circle, container, false);
 
         pieChart = (PieChart)v.findViewById(R.id.pie_chart);
-        pieChart2 = (PieChart)v.findViewById(R.id.pie_chart2);
+        dbEmotionHelper = new DBEmotionHelper(getContext(),
+                "EMOTIONLIST", null, 1);
+        List<Emotion> emotions;
+        emotions = dbEmotionHelper.getAllEmotion();
 
-        PieData pieData, pieData2;
+
+        PieData pieData;
         PieDataSet pieDataSet;
         ArrayList pieEntries;
-        ArrayList PieEntryLabels;
 
         pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(5f, "송교희"));
-        pieEntries.add(new PieEntry(6f, "최승호"));
-        //pieEntries.add(new PieEntry(6f, "김영일"));
+        for(int i=0; i<emotions.size(); i++) {
+            if(!emotions.get(i).getName().equals("me")) {
+                Log.e("hello", emotions.get(i).getScore()+":"+ emotions.get(i).getName());
+            }
+        }
 
-        pieDataSet = new PieDataSet(pieEntries, "");
-        pieData = new PieData(pieDataSet);
-        pieChart.setData(pieData);
-        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieDataSet.setSliceSpace(2f);
-        pieDataSet.setValueTextColor(Color.WHITE);
-        pieDataSet.setValueTextSize(13f);
-        pieDataSet.setSliceSpace(5f);
-
-
-        pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(5f, "송교희"));
-        pieEntries.add(new PieEntry(6f, "최승호"));
         //pieEntries.add(new PieEntry(6f, "김영일"));
 
         pieDataSet = new PieDataSet(pieEntries, "");

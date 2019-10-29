@@ -15,19 +15,11 @@
         <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_margin="10dp"
+        android:layout_height="330dp"
+        android:layout_margin="18dp"
         android:layout_marginTop="50dp"
         android:text="상대방의 친밀도"/>
 
-
-        <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pie_chart2"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_margin="10dp"
-        android:layout_marginTop="50dp"
-        android:text="나의 친밀도"/>
 
     </LinearLayout>
 </ScrollView>

@@ -63,6 +63,23 @@ public class DBEmotionHelper extends SQLiteOpenHelper {
         return score;
     }
 
+    public List<Emotion> getAllEmotion(){
+        List<Emotion> emotions = new ArrayList();
+        StringBuffer sb = new StringBuffer();
+        sb.append(" SELECT NAME, SCORE FROM EMOTIONLIST");
+        // 읽기 전용 DB 객체를 만든다.
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sb.toString(), null);
+
+        while( cursor.moveToNext() ) {
+            emotions.add(new Emotion(cursor.getString(0), cursor.getInt(1)));
+        }
+        cursor.moveToFirst();
+        cursor.close();
+
+        return emotions;
+    }
+
     public void updateEmotion(String name, int score){
         SQLiteDatabase db = getWritableDatabase();
 

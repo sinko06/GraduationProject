@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,14 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="30dp"
-        android:orientation="vertical"><![CDATA[
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-
-        ]]>
+        android:orientation="vertical">
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
@@ -24,52 +18,162 @@
             android:layout_height="300dp"
             android:layout_margin="10dp" />
 
-  <!--      <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp">
 
-            <TextView
-                android:text="6일전"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="5일전"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="4일전"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="3일전"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="2일전"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="어제"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="오늘"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
--->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"/>
+            android:layout_margin="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="20dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="▣ 나의 가장 긍정적인 말들"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/winner" />
+
+                    <TextView
+                        android:id="@+id/emotion_line1"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/winner2" />
+
+                    <TextView
+                        android:id="@+id/emotion_line2"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/winner3" />
+
+                    <TextView
+                        android:id="@+id/emotion_line3"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="▣ 나의 가장 부정적인 말들"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/winner" />
+
+                    <TextView
+                        android:id="@+id/emotion_line4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="5" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/winner2" />
+
+                    <TextView
+                        android:id="@+id/emotion_line5"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/winner3" />
+
+                    <TextView
+                        android:id="@+id/emotion_line6"
+                        android:layout_width="0dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
 
 
     </LinearLayout>

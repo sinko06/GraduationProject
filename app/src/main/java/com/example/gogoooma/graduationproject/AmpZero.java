@@ -60,16 +60,22 @@ public class AmpZero {
             }
         });
         audioDispatcher.run();
-        for (int j = 0; j < 491; j++) {
-            in[1][2 * j + 1] = zero.get(j);
-            in[1][2 * j + 2] = zero.get(j);
+        if(zero.size()!=0 && zero.size() > 491){
+            for (int j = 0; j < 491; j++) {
+                in[1][2 * j + 1] = zero.get(j);
+                in[1][2 * j + 2] = zero.get(j);
+            }
+            for (int j = 983; j < 1000; j++) {
+                in[1][j] = 0;
+            }
+        }else{
+            for (int j = 0; j < 1000; j++) {
+                in[1][j] = 0;
+            }
         }
-        for (int j = 983; j < 1000; j++) {
-            in[1][j] = 0;
-        }
+
         zero.clear();
         return in;
     }
 
 }
-

@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -106,6 +107,25 @@ public class MainActivity extends AppCompatActivity {
                 clickMenu(itemIndex);
             }
         });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final long changeTime = 1000L;
+                spaceNavigationView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                spaceNavigationView
+                                        .setCentreButtonColor(ContextCompat.getColor(MainActivity.this
+                                                , R.color.colorAccent));
+                            }
+                        });
+                    }
+                }, changeTime);
+            }
+        }).start();
     }
 
     public void clickMenu(int itemIndex){
