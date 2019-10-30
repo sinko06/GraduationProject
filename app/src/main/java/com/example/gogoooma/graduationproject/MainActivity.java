@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,7 @@ import be.tarsos.dsp.io.android.AndroidFFMPEGLocator;
 public class MainActivity extends AppCompatActivity {
     String[] resultPath = null;
     DBMusicHelper helper;
+    SpaceNavigationView spaceNavigationView;
     SQLiteDatabase database;
 
 //    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         database = helper.getWritableDatabase();
         GetAllMp3Path();
         new process().execute();
-        final SpaceNavigationView spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
+        spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("home", R.drawable.menu_man));
         spaceNavigationView.addSpaceItem(new SpaceItem("emotion", R.drawable.menu_emotion));
@@ -107,28 +109,10 @@ public class MainActivity extends AppCompatActivity {
                 clickMenu(itemIndex);
             }
         });
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final long changeTime = 1000L;
-                spaceNavigationView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                spaceNavigationView
-                                        .setCentreButtonColor(ContextCompat.getColor(MainActivity.this
-                                                , R.color.colorAccent));
-                            }
-                        });
-                    }
-                }, changeTime);
-            }
-        }).start();
+
     }
 
-    public void clickMenu(int itemIndex){
+    public void clickMenu(int itemIndex) {
         FragmentManager manager = getSupportFragmentManager();
         switch (itemIndex) {
             case 0:
@@ -147,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private long backKeyPressedTime = 0;
+
     @Override
     public void onBackPressed() {
         // 기존 뒤로가기 버튼의 기능을 막기위해 주석처리 또는 삭제
@@ -174,13 +159,13 @@ public class MainActivity extends AppCompatActivity {
         // MP3 경로를 가질 문자열 배열.
 
         // 외장 메모리 접근 권한을 가지고 있는지 확인. ( Marshmallow 이상 )  // mAcitivity == Main Activity
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
             String selectionMimeType = MediaStore.Files.FileColumns.MIME_TYPE + "=?";
             // 찾고자하는 파일 확장자명.
             String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("mp3");
 
-            String[] selectionArgsMp3 = new String[]{ mimeType };
+            String[] selectionArgsMp3 = new String[]{mimeType};
 
             Cursor c = getContentResolver().query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -209,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
             super.onProgressUpdate(values);
 
         }
+
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
@@ -217,26 +203,27 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             try {
-                List<Music> musicArrayList =  helper.getAllMusic();
+                List<Music> musicArrayList = helper.getAllMusic();
                 List<String> musictitlelist = new ArrayList();
-                for(int i=0; i< musicArrayList.size();i++){
+                for (int i = 0; i < musicArrayList.size(); i++) {
                     musictitlelist.add(musicArrayList.get(i).Title);
                 }
-                for(int i=0; i< resultPath.length;i++){
+                for (int i = 0; i < resultPath.length; i++) {
+
                     String[] titlelen = resultPath[i].split("/");
-                    String title = titlelen[titlelen.length-1].replace(".mp3","");
-                    if(!(musictitlelist.contains(title))){
+                    String title = titlelen[titlelen.length - 1].replace(".mp3", "");
+                    if (!(musictitlelist.contains(title))) {
                         float[][] input;
                         input = new AmpZero().Test(resultPath[i]);
                         float[][] output = new float[1][2];
                         float[][][][] new_input = new float[1][2][1000][1];
-                        for(int j=0; j< 1000;j++){
+                        for (int j = 0; j < 1000; j++) {
                             new_input[0][0][j][0] = input[0][j];
                             new_input[0][1][j][0] = input[1][j];
 
                         }
                         Interpreter tflite = getTfliteInterpreter("amp_keras.tflite");
-                        tflite.run(new_input,output);
+                        tflite.run(new_input, output);
                         helper.addMusic(title, output[0][0]);
                     }
                 }
@@ -250,8 +237,7 @@ public class MainActivity extends AppCompatActivity {
     private Interpreter getTfliteInterpreter(String modelPath) {
         try {
             return new Interpreter(loadModelFile(MainActivity.this, modelPath));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -266,17 +252,17 @@ public class MainActivity extends AppCompatActivity {
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
     }
 
-    public void getPermission(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_EXTERNAL_STORAGE)) {
+    public void getPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
             } else {
                 ActivityCompat.requestPermissions(this,

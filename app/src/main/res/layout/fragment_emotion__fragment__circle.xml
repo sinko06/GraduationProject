@@ -10,6 +10,13 @@
         android:orientation="vertical"
         android:layout_marginBottom="30dp"
         android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="▣ 친구와의 친밀도"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content" />
 
         <!-- TODO: Update blank fragment layout -->
         <com.github.mikephil.charting.charts.PieChart

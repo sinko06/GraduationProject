@@ -60,7 +60,7 @@ public class Emotion_Fragment_Circle extends Fragment {
         pieEntries = new ArrayList<>();
         for(int i=0; i<emotions.size(); i++) {
             if(!emotions.get(i).getName().equals("me")) {
-                Log.e("hello", emotions.get(i).getScore()+":"+ emotions.get(i).getName());
+                pieEntries.add(new PieEntry((float)emotions.get(i).getScore(), emotions.get(i).getName()));
             }
         }
 
