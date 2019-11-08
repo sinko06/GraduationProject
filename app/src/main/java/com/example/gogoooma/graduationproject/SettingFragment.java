@@ -47,7 +47,8 @@ import java.util.List;
  */
 public class SettingFragment extends Fragment {
     View v;
-    private Button logout_button, update_button, reset_button;
+    private Button logout_button, update_button, reset_button, ipnum_button;
+    private EditText ipnum_text;
     private FirebaseAuth mfirebaseAuth;
     private DBUserHelper dbUserHelper;
     TextView my_profile_name, my_profile_phone;
@@ -76,6 +77,15 @@ public class SettingFragment extends Fragment {
         logout_button = (Button) v.findViewById(R.id.button_logout);
         update_button = (Button) v.findViewById(R.id.button_update_friendslist);
         reset_button = (Button) v.findViewById(R.id.button_reset);
+        ipnum_text = (EditText) v.findViewById(R.id.ipnum_text);
+        ipnum_button = (Button) v.findViewById(R.id.ipnum_button);
+
+        ipnum_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ipnum = ipnum_text.getText().toString();
+            }
+        });
 
         logout_button.setOnClickListener(new View.OnClickListener() {
             @Override

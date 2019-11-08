@@ -154,6 +154,30 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/ipnum_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:hint="IP를 입력하세요"
+                android:textColor="#9b47e5" />
+
+            <Button
+                android:id="@+id/ipnum_button"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="2"
+                android:background="@drawable/button_shape"
+                android:backgroundTint="#9b47e5"
+                android:text="연결"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

@@ -54,6 +54,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private ListView messageListView;
     private MessageAdapter messageAdapter;
+    private String ipnum = SettingFragment.ipnum;
 
     private Socket mSocket;
 
@@ -85,7 +86,7 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         try {
-            mSocket = IO.socket("http://192.168.58.4:8080");
+            mSocket = IO.socket("http://"+ ipnum +":8080");
             //mSocket = IO.socket("http://" + SettingFragment.ipnum + ":2000");
         } catch (URISyntaxException e) {
         }
@@ -214,7 +215,7 @@ public class ChatActivity extends AppCompatActivity {
         public void run() {
             try {
                 socket = new java.net.Socket();
-                SocketAddress addr = new InetSocketAddress("192.168.58.4", 2004);
+                SocketAddress addr = new InetSocketAddress(ipnum, 2004);
                 socket.connect(addr);
 
                 DataOutputStream dout = new DataOutputStream(socket.getOutputStream());
